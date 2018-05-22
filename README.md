@@ -1,2 +1,2 @@
-# picture
-markdown_picture
+# CTF
+include write_up,image,script
