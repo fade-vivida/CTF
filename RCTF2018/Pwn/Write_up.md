@@ -1,15 +1,14 @@
 5/24/2018 11:25:55 PM 
 
-# RCTF2018 #
-## PWN ##
-### Rnote ###
-### 1.题目分析 ###
+# RCTF2018 PWN #
+# Rnote #
+## 1.题目分析 ##
 典型的菜单题目，漏洞点位于delete_note()中，对ptr指针没有进行初始化。因此，该指针保存了之前函数对该栈地址（ebp-x018）赋值过后的值。  
 存在漏洞函数如下所示：  
 ![漏洞点](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/1.PNG)  
 保护机制如下：  
 ![保护机制](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/2.PNG)  
-### 2.漏洞利用 ###
+## 2.漏洞利用 ##
 创建堆块如下所示：
 
 	payload = 'AAAAAA'
@@ -20,7 +19,7 @@
 	add_note('c',0x88,payload)
 	add_note('f',0x88,payload)
 
-#### 2.1 泄露libc地址 ####
+### 2.1 泄露libc地址 ###
 首先通过show\_note()函数对之后想要释放的堆块进行定位，然后调用delete\_note()函数，传入一个当前不存在的title值，此时程序遍历当前note列表，无法找到对应title的note，因此就不会对ptr指针进行更新，默认释放了之前show_note()函数对该栈地址设定的值。并且对note\_list进行清空时，i=32，note\_list[32]=0。 
  
 	step 1: leak libc
@@ -34,7 +33,7 @@
 	libc.address = top_addr - 0x58 - 0x3C4B20
 	lg('libc_addr',libc.address)
 一个需要注意的点是，保存note结构的chunk是一个fastbin，当对该fastbin进行free后，如果该fastbin是对应fastbin链表中第一个被释放的，fd位置会被清0，而fd的位置正好保存了title值。因此查找时不应该查找原title值，应该查找'\x00'。
-#### 2.2 泄露堆地址 ####
+### 2.2 泄露堆地址 ###
 方法与lead libc相同，不同的在于，需要释放一个conten也为fastbin大小（0x30）的note。然后申请一个content大小为smallbin大小的note，将刚才释放的note结构（0x20）申请回来。再次释放一个content大小为fastbin大小（0x30）的note，此时0x30大小的fastbin空闲链表中就有2个chunk，其中第一个chunk的fd字段就为一个heap地址，并且0x20大小的fastbin空闲链表中只有一个chunk（note结构），其fd字段为0。
 
 	step 2: leak heap_addr
@@ -51,10 +50,10 @@
 	ru('content: ')
 	heap_addr = u64(rv(6).ljust(8,'\x00')) - 0x20
 	lg('heap_addr',heap_addr)
-#### 2.3 触发unlink，修改free_hook为system ####
+### 2.3 触发unlink，修改free_hook为system ###
 通过堆布局，使两个smallbin（content）在堆空间布局上连续。然后释放相邻的两个smallbin，并再次申请一个content大小为0x90（大于0x88即可）的note结构。覆写下一个chunk的presize和size字段，然后释放下一个chunk，出发unlink。  
 之后覆写free_hook为system，成功实现利用。  
-#### 3.expolit代码 ####
+### 3.expolit代码 ###
     from pwn import *
     from ctypes import *
     import os
@@ -232,21 +231,21 @@
     hack()
 
 
-### Rnote4 ###
-#### 1.题目分析 ####
+# Rnote4 #
+## 1.题目分析 ##
 在edit_note()函数中存在简单粗暴的堆溢出漏洞，关键在于如何利用，程序无任何能泄露地址的地方。  
 存在漏洞点如下图所示:  
 ![漏洞点](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/RNote4/picture/1.PNG)  
 保护机制中，No PIE，No RELRO。
-#### 2.漏洞利用 ####
+## 2.漏洞利用 ##
 可以发现程序没有开启基地址随机化，并且可覆写GOT表。因此考虑采用dl_resolve改写free_got为system地址，然后调用free函数，实现利用。
-#### 2.1 改写ELF文件头的dynamic节的strtab字段 ####
+### 2.1 改写ELF文件头的dynamic节的strtab字段 ###
 改写strtab字段值为一个可控的内存区域。
-#### 2.2 伪造strtab ####
+### 2.2 伪造strtab ###
 改写strtab中"free"字符串偏移处为"system"。
-#### 2.3 改写free_got ####
+### 2.3 改写free_got ###
 改写free\_got为free\_plt+0x6，使其执行dl_resolve。
-#### 3.expolit代码 ####
+## 3.expolit代码 ##
     from pwn import *
     from ctypes import *
     import os
@@ -389,11 +388,11 @@
     hack()
 
 
-### Simulator ###
-#### 1.题目分析 ####
+# Simulator #
+## 1.题目分析 ##
 MIPS模拟器，支持12条MIPS基本指令，提供了32个整数寄存器，以及0x1000大小的.data段和0x1000大小的.text段。其中寄存器及指令相关信息如下所示。
 
-#### Descripion of register： ####
+### Descripion of register： ###
 **zeor**  
 **at**  
 **v0~v1**  
@@ -408,7 +407,7 @@ MIPS模拟器，支持12条MIPS基本指令，提供了32个整数寄存器，�
 **ra**  
 共32个寄存器。
 
-#### Descripion of instruction： ####
+### Descripion of instruction： ###
 #### 1.li ####
 load immeadiate  
 **opcode:0x21**  
@@ -451,16 +450,16 @@ operand 3: register/imm
 function: if(v0==1) printf value of a0。  
 
 
-**程序漏洞点：**  
+### 程序漏洞点: ###
 1.add，sub函数存在数组下标越界，其中参数a1既可以是一个寄存器也可以是一个立即数。如果是一个立即数，则其大小只要在int范围内均可。  
 ![漏洞点1](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/1.PNG)  
 2.lw，sw函数存在数组下标越界，由于程序中比较的方法为有符号数的比较（jle），因此可以采用负数来进行绕过。  
 ![漏洞点2](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/3.PNG)  
 3.栈溢出漏洞，可结合前两个漏洞。修改\_\_stack\_chk\_fail的got表为ret地址，然后进行rop（可采用**dl_resolve**和**DynEym**两种方法）。  
 ![漏洞点3](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/simulator/picture/4.PNG)
-#### 2.漏洞利用 ####
-#### 2.1 覆写stack\_chk\_fail的GOT表为RET地址 ####
-**Method 1:**  
+## 2.漏洞利用 ##
+### 2.1 覆写stack\_chk\_fail的GOT表为RET地址 ###
+#### Method 1: ####
 使用sub或and指令
   
 	# Method 1： use add/sub
@@ -469,8 +468,7 @@ function: if(v0==1) printf value of a0。
 	print hex(offset) 
 	code = 'add '+str(offset)+','+str(leave_ret)+','+str(0)
 	input_code(code)
-
-**Method 2:**  
+#### Method 2: ####
 使用lw和sw指令，在这主要是用sw指令进行覆写。使用lw指令进行信息泄露的原理与其类似。
 
 	# Method 2: use lw/sw
@@ -486,8 +484,8 @@ function: if(v0==1) printf value of a0。
 	sl('END')
 一个需要注意的点就是在计算offset时，由于必须保证`t1<=0x400`，且mapp0的值是小于stack\_chk\_fail\_got的。
 因此必须是t1的值必须为一个复制，且满足等式要求使其高位被舍去。
-#### 2.2 栈溢出利用 ####
-**Method 1: dl\_2\_resolve**  
+### 2.2 栈溢出利用 ###
+#### Method 1: dl\_2\_resolve ####
 直接使用roputils进行dl\_resolve的构造，唯一需要注意的点就是程序中没有read函数，可使用fgets函数进行代替。但fgets函数的第三个参数为stdin，需要先进行leak。
 
 	# step 2: leak the value of stdin
@@ -512,5 +510,5 @@ function: if(v0==1) printf value of a0。
 	payload += pwn_rop.fill(100, payload)
 	sl(payload)
 
-**Method 2: DynELF**  
+#### Method 2: DynELF ####
 puts函数构造leak，未完待续。。。
