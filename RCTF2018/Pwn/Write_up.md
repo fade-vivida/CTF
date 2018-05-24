@@ -391,7 +391,19 @@
 MIPS模拟器，支持12条MIPS基本指令，提供了32个整数寄存器，以及0x1000大小的.data段和0x1000大小的.text段。其中寄存器及指令相关信息如下所示。
 
 #### Descripion of register： ####
-zeor,at,v0~v1,a0~a3,t0~t7,s0~s7,t8~t9,k0~k1,gp,sp,fp,ra共32个寄存器。
+**zeor**  
+**at**  
+**v0~v1**  
+**a0~a3**  
+**t0~t7**  
+**s0~s7**  
+**t8~t9**  
+**k0~k1**  
+**gp**  
+**sp**  
+**fp**  
+**ra**  
+共32个寄存器。
 
 #### Descripion of instruction： ####
 #### 1.li ####
