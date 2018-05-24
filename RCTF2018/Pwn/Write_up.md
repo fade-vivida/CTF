@@ -384,3 +384,58 @@
     	p.interactive()
     
     hack()
+
+
+### Simulator ###
+#### 1.题目分析 ####
+MIPS模拟器，支持12条MIPS基本指令，提供了32个整数寄存器，以及0x1000大小的.data段和0x1000大小的.text段。其中寄存器及指令相关信息如下所示。
+
+#### Descripion of register： ####
+zeor,at,v0~v1,a0~a3,t0~t7,s0~s7,t8~t9,k0~k1,gp,sp,fp,ra共32个寄存器。
+
+#### Descripion of instruction： ####
+#### 1.li ####
+load immeadiate  
+**opcode:0x21**  
+operand 1: register  
+operand 2: immediate  
+#### 2.lw ####
+load word  
+**opcode:0x23**  
+operand 1: register  
+operand 2: register/memory_label  
+#### 3.sw ####
+store word  
+**opcode:0x2B**  
+operand 1: register  
+operand 2: register  
+#### 4.move ####
+**opcode:0x06**  
+operand 1: register  
+operand 2: register  
+#### 5.beq #### 
+**opcode:0x04**  
+operand 1: register  
+operand 2: register  
+operand 3: offset  
+#### 6.j(jmp) ####
+jmp   
+**opcode:0x02**  
+operand 1: offset  
+#### 7.Arithmetic instructions ####  
+**opcode:0x20  ins\_func:add  
+opcode:0x22  ins\_func:sub  
+opcode:0x24  ins\_func:and  
+opcode:0x25  ins\_func:or  
+opcode:0x2a  ins\_func:slt**  
+operand 1: register/imm  
+operand 2: register/imm  
+operand 3: register/imm  
+#### 8.syscall ####
+**opcode:0x0c**  
+function: if(v0==1) printf value of a0。  
+程序漏洞点：  
+1.add，sub函数存在数组下标越界  
+![漏洞点1]()  
+2.lw，sw函数存在数组下标越界  
+![漏洞点2]()
