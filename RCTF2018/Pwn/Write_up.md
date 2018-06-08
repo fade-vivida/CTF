@@ -547,7 +547,7 @@ function: if(v0==1) printf value of a0。
 由于puts函数的输出无法指定输出字节数，因此考虑使用recv函数timeout特性，逐字节的读取输出内容。然后判断上一次的输出是否为一个'\n'，当前输出是否为一个'\0'来鉴定puts函数是否已经完成输出。  
 计算得到system函数地址后，就是普通的ROP调用过程，使用fgets写入'/bin/sh'，然后进行调用。  
 ## 3.exploit代码 ##
-### 1.使用dl_resolve AC代码 ###
+### 3.1 使用dl_resolve AC代码 ###
     from pwn import *
     from ctypes import *
     import os
@@ -728,7 +728,7 @@ function: if(v0==1) printf value of a0。
     	p.interactive()
     
     hack()
-### 2.使用DynElf AC代码 ###
+### 3.2 使用DynElf AC代码 ###
     from pwn import *
     from ctypes import *
     import os
@@ -938,3 +938,26 @@ function: if(v0==1) printf value of a0。
     hack()
 # babyheap #
 ## 1.题目分析 ##
+off by null的极限利用。  
+存在漏洞的函数位置如下所示：
+![漏洞点](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/picture/babyheap_vulpos.png)  
+**利用思路为off by null + fastbin attack**  
+## 2.漏洞利用 ##
+### 2.1 leak libc地址 ###
+本题的难点在于如何利用off by null来泄露libc的基地址。  
+假设有A，B，C，D四个块，其排列如下所示：  
+A || B || C || D
+首先将B释放，然后利用A出发off by null漏洞，修改B的size字段（注：对B size字段的修改只能将其最后一个字节修改为0x00，同时程序所能申请的最大大小小于0x100，因此需要将B申请为0x110大小的chunk，这样在覆写后其大小变为0x100，达到修改的目的）。  
+
+同时由于将B的chunk size由0x110修改为0x100，如果再次对B进行分配，会首先调用unlink将B从smallbin链表中拆除，此时会检查B的next chunk的presize是否等于B的size，具体检查位置如图所示：  
+![unlink_check1](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/picture/unlink_presize.PNG)
+因此在对B进行填充时，需要将B的最后16个字节填充为（0x00000100，0x00000021）。  
+
+然后申请B1（0xa0），B2（0x60），此时内存中的对款布局如下所示：  
+A || B1 || B2 || R || C || D  
+其中R为一个0x10大小的剩余块（其内容就为p64(0x100)+p64(0x21))。
+
+然后释放C，释放B1，此时就会将B1，B2，C合并为一个大的堆块E，堆块不去如下所示：  
+A || B1 || B2 || R || C || D  
+A ||        E  </t></t>         || D
+## 3.expolit代码 ##
