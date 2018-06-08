@@ -957,7 +957,20 @@ A || B || C || D
 A || B1 || B2 || R || C || D  
 其中R为一个0x10大小的剩余块（其内容就为p64(0x100)+p64(0x21))。
 
-然后释放C，释放B1，此时就会将B1，B2，C合并为一个大的堆块E，堆块不去如下所示：  
+然后释放C，释放B1，此时就会将B1，B2，C合并为一个大的堆块E，堆块布局如下所示：  
 A || B1 || B2 || R || C || D  
-A ||        E  </t></t>         || D
+A ||  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  E &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| D  
+
+然后再次申请0xa0大小的一个chunk C1，此时会从E中进行分配，剩余chunk E1和chunk B2发生了重叠，我们可以通过打印B2的值，泄露出top\_chunk的地址，堆块布局如下所示：    
+A || C1 || &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| D  
+结果如下所示：  
+![show_libc](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/picture/show_libc.PNG)  
+### 2.2 利用fastbin attack ###
+这里只有一个需要注意的点就是不能连续对同一个fastbin chunk进行释放，但如果在两次释放中夹杂一次其他chunk（同样大小）的释放则可以。  
+
+修改malloc\_hook地址为one\_gadget。  
+注意fastbin attack利用过程中会对chunk的size字段进行检查，看其是否属于当前fastbin链表。绕过方法为：错位对齐和fastbin索引计算的不精确性（64bit：右移4位，32bit：右移3位）。  
+
+另一个需要注意的地方是使用one\_gadget的一个技巧。  
+由于execve（\*filename，\*argv[]，\*env[]）的第二个参数为一个指向命令行的指针数组，因此要么使其为NULL，要么使其为一个可读且不影响程序执行的地址。在本题中，如果直接将malloc\_hook修改为one\_gadget是无法成功的，由于该指针指向了一个不可读的地址。因此可以将malloc\_hook修改为realloc()地址（该函数中有sub rsp,0xAA操作，可以将argv指向一个可读的位置），然后将realloc\_hook修改为one\_gadget即可。
 ## 3.expolit代码 ##
