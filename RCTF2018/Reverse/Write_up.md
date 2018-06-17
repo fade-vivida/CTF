@@ -1,10 +1,10 @@
 # RCTF2018 #
-## Reverse ##
-### Simple\_vm ###
+# Reverse #
+## Simple\_vm ##
 题目分析：一道虚拟机逆向的题目，给出了一个p.bin文件，包含了操作的指令序列和输出数据。要求通过对程序执行流程进行分析，从输出数据得到正确的用户输入。
 
 程序功能分析如下：
-#### 1.输出"Input Flag:"，提示用户输入Flag ####
+### 1.输出"Input Flag:"，提示用户输入Flag ###
 执行流程：</br>
 **case 0x01：**</br>
 以该指令之后4个字节作为偏移（offset），跳转到file+offset处继续执行（ip = file + offset）。</br>
@@ -22,7 +22,7 @@ tmp = tmp + 1</br>
 **case 0x01 --> case 0x15 --> case 0x0e --> case 0x12 --> case 0x0B --> case 0x0C --> case 0x0e --> case 0x0B --> case 0x0C（循环）</br>**
 构成一个调用循环，出循环条件为已经打印完字符串</br>
 
-#### 2.读取用户输入input ####
+### 2.读取用户输入input ###
 **case 0x15:</br>**
 设置当前tmp值为之后4个字节，然后ip=ip+4。</br>
 **case 0x0e:</br>**
@@ -36,7 +36,7 @@ tmp = tmp + 1</br>
 最终调用序列如下所示：</br>
 **case 0x15 --> case 0x0e --> case 0x0a --> case 0x16 -->case 0x0c --> case 0x0e -- 0x0a(循环）**
 
-#### 3.对输入input的每个字节进行变换 ####
+### 3.对输入input的每个字节进行变换 ###
 **case 0x03:</br>**
 以之后4个字节内容为地址，取值后赋值给变量c, c = file[offset]</br>
 **case 0x10:</br>**
@@ -101,7 +101,7 @@ file[0x140] = tmp
 判断是否处理完所有输入，判断长度为file[0x145]处的值。若file[0x145]不为0，则继续处理剩余输入。  
 
 
-#### 4.对输入input进行Check ####
+### 4.对输入input进行Check ###
 **case 0x03:**  
 c = file[0x146] = 0x1f  
 **case 0x11:**  
@@ -121,5 +121,5 @@ fl = c - tmp
 **case 0x18:**  
 判断fl是否为0，也即判断input[len-1] == file[0x24]是否相等。如果相等，则跳转到case 0x0c处。相当于倒序比较变换后的输入与文件中某个固定的字符序列是否相同。若成功，输出“Rigth”，否则输出“Wrong”。  
 
-#### 5.最终Flag ####
+### 5.最终Flag ###
 ![Aaron Swartz](https://raw.githubusercontent.com/fade-vivida/picture/master/RCTF2018/Reverse/Simple_vm/picture/1.png)
