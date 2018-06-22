@@ -13,4 +13,9 @@
 ### 3.1 泄露堆地址 ####
 利用漏洞点3可泄漏堆地址
 ### 3.2 House of Orange ####
-House of Orange利用原理就是通过堆溢出漏洞，修改top\_chunk的size字段，然后再次申请一个大于修改后top->size的chunk时，会调用sysmalloc()函数
+House of Orange利用原理就是通过堆溢出漏洞，修改top\_chunk的size字段，然后再次申请一个大于修改后top->size的chunk时，会调用sysmalloc()函数。而sysmalloc会采用两种方式（mmap一块新的内存，或者是对top chunk进行扩展）。  
+![sysmalloc]()  
+因此，如果申请大小小于mmap\_threshold（即128*1024）,则会对原来的top chunk进行扩展，会将旧的top chunk放入unsortedbin中。  
+![int free]()  
+### 3.3 Unsortedbin attack ###
+Unsortedbin attack的利用思路为，利用对Unsortedbin中chunk进行拆链时，会将victim->bk->fd赋值为&unsortedbin,从而达到对任意地址写固定值。
