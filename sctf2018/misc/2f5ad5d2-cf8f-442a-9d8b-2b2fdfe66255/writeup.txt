@@ -1,0 +1,5 @@
+分析sprite2369 定位到sprite1217 in frame 440
+可以发现有关键提示信息：
+U1lDe0YzaVpoYWlfa3U0aWxlX1QxMTF9
+base64解码得：
+SYC{F3iZhai_ku4ile_T111}
