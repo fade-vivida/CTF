@@ -138,3 +138,9 @@ sub\_400A90函数如下图所示：
     		print '\n'
     print 'sctf{' + ''.join(result) + '}'
 
+## 4.题外话 ##
+第一次使用RetDec插件来接mips逆向的题目，主要的时间都花在如何安装使用插件上。其中有几个注意事项。  
+1.最新版的RetDecv5.0只能使用在IDA7.0及其以上版本。  
+2.需要下载RetDec，RetDec-plugin。其中RetDec是真正用来进行反编译的工具，可以脱离IDA使用。RetDec-plugin是专门为IDA开发的插件工具。  
+3.需要下载并配置MSYS2，并将C:\msys64\usr\bin;C:\msys64\mingw64\bin加入环境变量中。  
+4.参照RetDec官方文档下载pygment等其他工具并正确配置。
