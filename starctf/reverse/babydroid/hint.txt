@@ -1,0 +1,2 @@
+It's not neccessary to run the apk. If you want to run it, we suggest you to use Android with Dalvik on real phone. If you failed to run the apk, pls just try to reverse it statically.
+submit *ctf{what_you_input}
