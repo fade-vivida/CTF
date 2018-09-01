@@ -1,0 +1,132 @@
+跳转表
+mmap1 hvmbin映射到内存中的区域。
+mmap2 另外一块0x1000大小的映射区域，用于过程中的读写
+初始化全局变量qword_0x2020b8保存在mmap2中写入的地址，命名为write_memory_ptr = mmap2 + 0x1000
+1. offset = 7，FFFFFA41  jump to 0xD15
+write_memory_ptr -= 4
+取值6F 0A 00 00,写到write_memory_ptr指向内存
+更新offset = 7
+
+2. offset = 7，FFFFFA41  jump to 0xD15
+write_memory_ptr -= 4
+取值68 65 6C 6C,写write_memory_ptr指向内存
+其实拼接后就是字符串"hello\n"
+offset = 0xC
+
+3. offset = 0xC ，FFFFFAA0 jmp to D74
+将"hello\n"的地址写到全局变量qword_2020F0处
+offset = 0x18
+
+4. offset = 0x18 ，FFFFFE22 jmp to 10f6
+取值0x01000000，调用sub_a35，该函数功能很简单为DWORD的字节序翻转，所以反转后结果为
+0x00000001，将改制写到全局变量qword_0x2020B0处
+offset = 4
+
+5. offset = 4 ， jmp to c09
+取值0x00000006，调用sub_a35，翻转后职位0x6，将其存入qword_0x2020c8处
+offset = 1
+
+6. offset = 1 ，jmp to afb
+同样，取值0x00000001，翻转0x1，存入qword_0x2020d8
+offset = 0xe
+
+7. offset = 0xe, jmp to e9a
+调用syscall eax=1（表明为write），输出qword_2020f0处内容（hello\n）
+offset = 0x14
+
+8. offset = 0x14, jmp to 1090
+write_memory_ptr -= 4
+当前文件读的位置（read_ptr)-文件头其实位置（mmap1），然后将文件偏移（0x30）右移2位得到0xc，然后在将
+0xc翻转0x0c000000，将该值写到write_memory_ptr指向内存处。
+offset = 5
+
+9. offset = 5 ， jmp to c63
+取值0x0000000e，翻转后为0xe，在左移2位为0x38，然后将当前文件读指针read_ptr（当前文件读指针为0x38）+ 0x38 = 0x70
+在从0x70处开始读一个DWORD，放入offset
+offset = 0x10
+
+10. offset = 0x10, jmp to f5f
+write_memory_ptr -= 4
+将（mapp2_end-mapp2_st）=0x1000,右移2位，得到0x400，翻转后0x00040000，写入write_memory_ptr指向地址。
+offset = 0x11
+
+11. offst = 0x11 ， jmp to fc5
+将write_memory_ptr写入全局变量qword_0x2020d0
+offset = 0xf
+
+12. offset = 0xf , jmp to ee9
+取值0x30000000，翻转为0x30，然后将write_memory_ptr - 0x30，
+offset = 0xc
+
+13. offset = 0xc ，jmp to d74
+将write_memory_ptr复制给qword_0x2020f0
+offset = 0x18
+
+14. offset = 0x18, jmp to 10f6,
+取值，翻转，然后赋值给qword_0x2020b0（赋值0）
+offset = 4
+
+15. offset = 4， jmp to c09
+取值，翻转，赋值给qword_0x2020c8（赋值0xf0）
+offset = 1
+
+16. offset = 1， jmp to afb
+取值，翻转，赋值给qword_0x2020d8（0）
+offset = 0xe
+
+17. offset = 0xe ，jmp to e9a
+调用syscall eax=0（表明是read），将数据读到qword_0x2020f0保存的地址(其实就是write_memory_ptr)，大小为0xf0
+offset = 0x12
+
+注：该处出现漏洞，原始输出缓存为0x30大小，但可以读入0xf0大小的数据，造成溢出
+
+
+18. offset = 0x12 ，jmp to ff6
+将qword_0x2020d0 写回write_memory_ptr
+offset = 0x13
+
+19. offset = 0x13, jmp to 1027
+从write_memory_ptr取值（0x00040000），翻转0x400，再左移两位0x1000，然后将其加上mmap2的基地址，赋值给qword_0x2020D0,
+write_memory += 4
+offset = 6
+
+20. offset = 6, jmp to cba
+从write_memory_ptr取值（0xc000000），翻转0xc，然后加3再乘4（0x3c），然后加上mmap1的基地址，更新read_ptr = 0x3c
+offset = 7
+write_memory_ptr += 4
+
+注：该处可以控制程序流程，通过改写偏移地址0xc为其他值，则控制流程按照我们输入的内容执行。
+
+21. offset = 7，jmp to d15
+write_memory_ptr -= 4
+取值0，写到write_memory_ptr
+offset = 7
+
+22. offset = 7, jmp to d15
+write_memory_ptr -= 4
+取值62 79 65 0a, 写到write_memory_ptr
+offset = 0xc
+实际为写入字符串"bye\n"
+
+23. offset = 0xc , jmp to d74
+将write_memory_ptr复制给qword_0x2020f0
+offset = 0x18
+
+24. offset = 0x18, jmp to 10f6
+取值0x01000000，翻转0x01，赋值给qword_0x2020b0
+offset = 4
+
+25. offset = 0x4 , jmp to c09
+取值，翻转，赋值给qword_0x2020c8(0x6)
+offset = 1
+
+26. offset = 1, jmp to afb
+取值，翻转，赋值给qword_0x2020d8(0x1)
+offset = 0xe
+
+27. offset = 0xe, jmp to e9a
+调用syscall，eax=1（write），输出qword_0x2020f0("bye")
+offset = 0x19
+
+28. offset = 0x19, jmp to 11a4
+exit()

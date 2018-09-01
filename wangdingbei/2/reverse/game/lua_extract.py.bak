@@ -1,0 +1,8 @@
+import idaapi
+
+start_address = 0x00427018
+data_length = 0x15DB
+data = idaapi.dbg_read_memory(start_address, data_length)
+fp = open('c:\\game_dump', 'wb')
+fp.write(data)
+fp.close()

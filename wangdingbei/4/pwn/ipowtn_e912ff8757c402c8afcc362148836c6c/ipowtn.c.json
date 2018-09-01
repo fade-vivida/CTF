@@ -1,0 +1,3093 @@
+{
+	"architecture" : 
+	{
+		"bitSize" : 32,
+		"endian" : "big",
+		"name" : "mips (mips i architecture)"
+	},
+	"classes" : [],
+	"date" : "2018-08-29",
+	"decompParams" : 
+	{
+		"abiPaths" : [],
+		"frontEndOutputFile" : "D:/study/ctf/ctf/ctf/match_2018/wangdingbei/4/pwn/ipowtn_e912ff8757c402c8afcc362148836c6c/ipowtn.c.frontend.ll",
+		"frontendFunctions" : [],
+		"keepAllFuncs" : false,
+		"libraryTypeInfoPaths" : 
+		[
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/types/arm.json",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/types/cstdlib.json",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/types/linux.json",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/types/windows.json",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/types/windrivers.json"
+		],
+		"outputFile" : "D:/study/ctf/ctf/ctf/match_2018/wangdingbei/4/pwn/ipowtn_e912ff8757c402c8afcc362148836c6c/ipowtn.c",
+		"selectedDecodeOnly" : false,
+		"selectedFunctions" : [],
+		"selectedNotFoundFncs" : [],
+		"selectedRanges" : [],
+		"staticSignPaths" : 
+		[
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/yara_patterns/static-code/elf/32/be/mips/mips-gcc-4.8.3.yara",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/yara_patterns/static-code/elf/32/be/mips/mips-sfloat-gcc-4.8.3.yara",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/yara_patterns/static-code/elf/32/be/mips/uClibc/mips-gcc-4.8.3.yara",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/yara_patterns/static-code/elf/32/be/mips/uClibc/mips-nan2008-gcc-4.8.3.yara",
+			"D:/study/ctf/tools/mips/retdec-v3.1-windows-64b/retdec/bin/../share/retdec/support/generic/yara_patterns/static-code/elf/32/be/mips/uClibc/mips-sfloat-gcc-4.8.3.yara"
+		],
+		"userStaticSignPaths" : [],
+		"verboseOut" : false
+	},
+	"entryPoint" : "0x4008b0",
+	"fileFormat" : "elf32",
+	"fileType" : "executable",
+	"functions" : 
+	[
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4012d0",
+			"fncType" : "userDefined",
+			"name" : "___libc_start_main",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4012b0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "unknown",
+			"endAddr" : "0x411504",
+			"fncType" : "userDefined",
+			"name" : "__gmon_start__",
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x411500",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "unknown",
+			"endAddr" : "0x4114fc",
+			"fncType" : "userDefined",
+			"name" : "__imp___isoc99_scanf",
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114f8",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114dc",
+			"fncType" : "userDefined",
+			"name" : "__imp_alarm",
+			"parameters" : 
+			[
+				{
+					"name" : "seconds",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114d8",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114e8",
+			"fncType" : "userDefined",
+			"name" : "__imp_exit",
+			"parameters" : 
+			[
+				{
+					"name" : "status",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnType" : 
+			{
+				"llvmIr" : "void"
+			},
+			"startAddr" : "0x4114e4",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114d8",
+			"fncType" : "userDefined",
+			"name" : "__imp_gettimeofday",
+			"parameters" : 
+			[
+				{
+					"name" : "tv",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "%timeval*"
+					}
+				},
+				{
+					"name" : "tz",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "%timezone*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114d4",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114d0",
+			"fncType" : "userDefined",
+			"name" : "__imp_memcpy",
+			"parameters" : 
+			[
+				{
+					"name" : "dest",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "src",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "n",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "void*"
+			},
+			"startAddr" : "0x4114cc",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114f4",
+			"fncType" : "userDefined",
+			"name" : "__imp_memset",
+			"parameters" : 
+			[
+				{
+					"name" : "s",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "c",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "n",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "void*"
+			},
+			"startAddr" : "0x4114f0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "ellipsis",
+			"endAddr" : "0x4114cc",
+			"fncType" : "userDefined",
+			"name" : "__imp_printf",
+			"parameters" : 
+			[
+				{
+					"name" : "format",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114c8",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114e0",
+			"fncType" : "userDefined",
+			"name" : "__imp_puts",
+			"parameters" : 
+			[
+				{
+					"name" : "s",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114dc",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "voidarg",
+			"endAddr" : "0x4114f8",
+			"fncType" : "userDefined",
+			"name" : "__imp_rand",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114f4",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114c8",
+			"fncType" : "userDefined",
+			"name" : "__imp_read",
+			"parameters" : 
+			[
+				{
+					"name" : "fd",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "buf",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "nbytes",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114c4",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114f0",
+			"fncType" : "userDefined",
+			"name" : "__imp_setvbuf",
+			"parameters" : 
+			[
+				{
+					"name" : "stream",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "%_IO_FILE*"
+					}
+				},
+				{
+					"name" : "buf",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				},
+				{
+					"name" : "modes",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "n",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a3"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114ec",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114d4",
+			"fncType" : "userDefined",
+			"name" : "__imp_signal",
+			"parameters" : 
+			[
+				{
+					"name" : "sig",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "handler",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void(i32)*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "void(i32)*"
+			},
+			"startAddr" : "0x4114d0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114ec",
+			"fncType" : "userDefined",
+			"name" : "__imp_srand",
+			"parameters" : 
+			[
+				{
+					"name" : "seed",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnType" : 
+			{
+				"llvmIr" : "void"
+			},
+			"startAddr" : "0x4114e8",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114c4",
+			"fncType" : "userDefined",
+			"name" : "__imp_strcmp",
+			"parameters" : 
+			[
+				{
+					"name" : "s1",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				},
+				{
+					"name" : "s2",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114c0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4114e4",
+			"fncType" : "userDefined",
+			"name" : "__imp_system",
+			"parameters" : 
+			[
+				{
+					"name" : "command",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114e0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "unknown",
+			"endAddr" : "0x4008b0",
+			"fncType" : "userDefined",
+			"name" : "__isoc99_scanf",
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4008a0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x401198",
+			"fncType" : "userDefined",
+			"name" : "__libc_csu_fini",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x401190",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x401248",
+			"fncType" : "userDefined",
+			"name" : "__libc_csu_init",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x401198",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x411500",
+			"fncType" : "userDefined",
+			"name" : "__libc_start_main",
+			"parameters" : 
+			[
+				{
+					"name" : "main",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32(i32, i8**, i8**)*"
+					}
+				},
+				{
+					"name" : "argc",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "ubp_av",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8**"
+					}
+				},
+				{
+					"name" : "init",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a3"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void()*"
+					}
+				},
+				{
+					"name" : "fini",
+					"storage" : 
+					{
+						"type" : "stack",
+						"value" : 16
+					},
+					"type" : 
+					{
+						"llvmIr" : "void()*"
+					}
+				},
+				{
+					"name" : "rtld_fini",
+					"storage" : 
+					{
+						"type" : "stack",
+						"value" : 20
+					},
+					"type" : 
+					{
+						"llvmIr" : "void()*"
+					}
+				},
+				{
+					"name" : "stack_end",
+					"storage" : 
+					{
+						"type" : "stack",
+						"value" : 24
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4114fc",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400770",
+			"fncType" : "userDefined",
+			"name" : "_init_proc",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400730",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4012f0",
+			"fncType" : "userDefined",
+			"name" : "_term_proc",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4012d0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400830",
+			"fncType" : "userDefined",
+			"name" : "alarm",
+			"parameters" : 
+			[
+				{
+					"name" : "seconds",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400820",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400860",
+			"fncType" : "userDefined",
+			"name" : "exit",
+			"parameters" : 
+			[
+				{
+					"name" : "status",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnType" : 
+			{
+				"llvmIr" : "void"
+			},
+			"startAddr" : "0x400850",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400820",
+			"fncType" : "userDefined",
+			"name" : "gettimeofday",
+			"parameters" : 
+			[
+				{
+					"name" : "tv",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "%timeval*"
+					}
+				},
+				{
+					"name" : "tz",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "%timezone*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400810",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400b38",
+			"fncType" : "userDefined",
+			"name" : "main",
+			"parameters" : 
+			[
+				{
+					"name" : "argc",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "argv",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8**"
+					}
+				},
+				{
+					"name" : "envp",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8**"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400ac0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400800",
+			"fncType" : "userDefined",
+			"name" : "memcpy",
+			"parameters" : 
+			[
+				{
+					"name" : "dest",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "src",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "n",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "void*"
+			},
+			"startAddr" : "0x4007f0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400890",
+			"fncType" : "userDefined",
+			"name" : "memset",
+			"parameters" : 
+			[
+				{
+					"name" : "s",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "c",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "n",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "void*"
+			},
+			"startAddr" : "0x400880",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "ellipsis",
+			"endAddr" : "0x4007f0",
+			"fncType" : "userDefined",
+			"name" : "printf",
+			"parameters" : 
+			[
+				{
+					"name" : "format",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4007e0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400840",
+			"fncType" : "userDefined",
+			"name" : "puts",
+			"parameters" : 
+			[
+				{
+					"name" : "s",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400830",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "voidarg",
+			"endAddr" : "0x4008a0",
+			"fncType" : "userDefined",
+			"name" : "rand",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400890",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4007e0",
+			"fncType" : "userDefined",
+			"name" : "read",
+			"parameters" : 
+			[
+				{
+					"name" : "fd",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "buf",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void*"
+					}
+				},
+				{
+					"name" : "nbytes",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4007d0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400880",
+			"fncType" : "userDefined",
+			"name" : "setvbuf",
+			"parameters" : 
+			[
+				{
+					"name" : "stream",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "%_IO_FILE*"
+					}
+				},
+				{
+					"name" : "buf",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				},
+				{
+					"name" : "modes",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "n",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a3"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400870",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400810",
+			"fncType" : "userDefined",
+			"name" : "signal",
+			"parameters" : 
+			[
+				{
+					"name" : "sig",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "handler",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "void(i32)*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "void(i32)*"
+			},
+			"startAddr" : "0x400800",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400870",
+			"fncType" : "userDefined",
+			"name" : "srand",
+			"parameters" : 
+			[
+				{
+					"name" : "seed",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnType" : 
+			{
+				"llvmIr" : "void"
+			},
+			"startAddr" : "0x400860",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4008bc",
+			"fncType" : "userDefined",
+			"name" : "start",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4008b0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4007d0",
+			"fncType" : "userDefined",
+			"name" : "strcmp",
+			"parameters" : 
+			[
+				{
+					"name" : "s1",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				},
+				{
+					"name" : "s2",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4007c0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400780",
+			"fncType" : "userDefined",
+			"name" : "sub_400770",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400770",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400798",
+			"fncType" : "userDefined",
+			"name" : "sub_400780",
+			"parameters" : 
+			[
+				{
+					"name" : "a1",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "a2",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "a3",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "a4",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a3"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400780",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "unknown",
+			"endAddr" : "0x400910",
+			"fncType" : "userDefined",
+			"name" : "sub_4008BC",
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4008bc",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4009ac",
+			"fncType" : "userDefined",
+			"name" : "sub_400910",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400910",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4009dc",
+			"fncType" : "userDefined",
+			"name" : "sub_4009AC",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4009ac",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400a00",
+			"fncType" : "userDefined",
+			"name" : "sub_4009E0",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4009e0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "unknown",
+			"endAddr" : "0x400a88",
+			"fncType" : "userDefined",
+			"name" : "sub_400A00",
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400a00",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "unknown",
+			"endAddr" : "0x400c30",
+			"fncType" : "userDefined",
+			"name" : "sub_400B38",
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400b38",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x401020",
+			"fncType" : "userDefined",
+			"name" : "sub_400C30",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400c30",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x401070",
+			"fncType" : "userDefined",
+			"name" : "sub_401020",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x401020",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x40111c",
+			"fncType" : "userDefined",
+			"name" : "sub_401070",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x401070",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x401190",
+			"fncType" : "userDefined",
+			"name" : "sub_40111C",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x40111c",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x4012a4",
+			"fncType" : "userDefined",
+			"name" : "sub_401250",
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x401250",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x401308",
+			"fncType" : "userDefined",
+			"name" : "sub_4012F0",
+			"parameters" : 
+			[
+				{
+					"name" : "a1",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "a2",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a1"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "a3",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a2"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				},
+				{
+					"name" : "a4",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a3"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i32"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x4012f0",
+			"usedCryptoConstants" : []
+		},
+		{
+			"callingConvention" : "cdecl",
+			"endAddr" : "0x400850",
+			"fncType" : "userDefined",
+			"name" : "system",
+			"parameters" : 
+			[
+				{
+					"name" : "command",
+					"storage" : 
+					{
+						"type" : "register",
+						"value" : "$a0"
+					},
+					"type" : 
+					{
+						"llvmIr" : "i8*"
+					}
+				}
+			],
+			"returnStorage" : 
+			{
+				"type" : "register",
+				"value" : "$v0"
+			},
+			"returnType" : 
+			{
+				"llvmIr" : "i32"
+			},
+			"startAddr" : "0x400840",
+			"usedCryptoConstants" : []
+		}
+	],
+	"globals" : 
+	[
+		{
+			"name" : ".init_proc_ptr",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411484"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32()*"
+			}
+		},
+		{
+			"name" : "__gmon_start___ptr",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411494"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "__libc_csu_fini_ptr",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411480"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[2 x i32()*]"
+			}
+		},
+		{
+			"name" : "__libc_csu_init_ptr",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x41147c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[3 x i32()*]"
+			}
+		},
+		{
+			"name" : "__libc_start_main_ptr",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411490"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "a0lfSec0lfUsec",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401340"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[25 x i8]"
+			}
+		},
+		{
+			"name" : "aAlarm",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005ec"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[6 x i8]"
+			}
+		},
+		{
+			"name" : "aBinSh",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401320"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[8 x i8]"
+			}
+		},
+		{
+			"name" : "aCC",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4013d0"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "aDynamicLinking",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400584"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[17 x i8]"
+			}
+		},
+		{
+			"name" : "aExit",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005f2"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[5 x i8]"
+			}
+		},
+		{
+			"name" : "aGettimeofday",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005a7"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[13 x i8]"
+			}
+		},
+		{
+			"name" : "aGlibc20",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40062e"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[10 x i8]"
+			}
+		},
+		{
+			"name" : "aGlibc27",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400624"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[10 x i8]"
+			}
+		},
+		{
+			"name" : "aGmonStart",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40056b"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[15 x i8]"
+			}
+		},
+		{
+			"name" : "aGo",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40135c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[8 x i8]"
+			}
+		},
+		{
+			"name" : "aIoStdinUsed",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400615"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[15 x i8]"
+			}
+		},
+		{
+			"name" : "aIsoc99Scanf",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005cf"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[15 x i8]"
+			}
+		},
+		{
+			"name" : "aLibLdSo1",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400154"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[13 x i8]"
+			}
+		},
+		{
+			"name" : "aLibcCsuFini",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400549"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[16 x i8]"
+			}
+		},
+		{
+			"name" : "aLibcCsuInit",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400539"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[16 x i8]"
+			}
+		},
+		{
+			"name" : "aLibcSo6",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40057a"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[10 x i8]"
+			}
+		},
+		{
+			"name" : "aLibcStartMain",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400559"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[18 x i8]"
+			}
+		},
+		{
+			"name" : "aMemcpy",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400601"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "aMemset",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005c8"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "aNoGuessIt",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401328"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[21 x i8]"
+			}
+		},
+		{
+			"name" : "aPrintf",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005e5"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "aPuts",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005fc"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[5 x i8]"
+			}
+		},
+		{
+			"name" : "aRead",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005f7"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[5 x i8]"
+			}
+		},
+		{
+			"name" : "aRldMap",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400595"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[10 x i8]"
+			}
+		},
+		{
+			"name" : "aSetvbuf",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40059f"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[8 x i8]"
+			}
+		},
+		{
+			"name" : "aSignal",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005ba"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "aSrand",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005b4"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[6 x i8]"
+			}
+		},
+		{
+			"name" : "aStdin",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400608"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[6 x i8]"
+			}
+		},
+		{
+			"name" : "aStdout",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40060e"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "aStrcmp",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005c1"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "aSystem",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4005de"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[7 x i8]"
+			}
+		},
+		{
+			"name" : "byte_400538",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400538"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i8"
+			}
+		},
+		{
+			"name" : "byte_401366",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401366"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i8"
+			}
+		},
+		{
+			"name" : "byte_401378",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401378"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i8"
+			}
+		},
+		{
+			"name" : "byte_401380",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401380"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i8"
+			}
+		},
+		{
+			"name" : "byte_401390",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401390"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i8"
+			}
+		},
+		{
+			"name" : "byte_4114B0",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4114b0"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i8"
+			}
+		},
+		{
+			"name" : "dbl_4013D8",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4013d8"
+			},
+			"type" : 
+			{
+				"llvmIr" : "double"
+			}
+		},
+		{
+			"name" : "dbl_4013E0",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4013e0"
+			},
+			"type" : 
+			{
+				"llvmIr" : "double"
+			}
+		},
+		{
+			"name" : "dbl_4013E8",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4013e8"
+			},
+			"type" : 
+			{
+				"llvmIr" : "double"
+			}
+		},
+		{
+			"name" : "dword_400000",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400000"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_400034",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400034"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_400164",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x400164"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[5 x i32]"
+			}
+		},
+		{
+			"name" : "dword_40019C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40019c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[9 x i32]"
+			}
+		},
+		{
+			"name" : "dword_40136C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40136c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_401374",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401374"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_40137C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40137c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_401384",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401384"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_40138C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40138c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_401394",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401394"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_40139C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40139c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_4013A4",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4013a4"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_4113F4",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4113f4"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_4113FC",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4113fc"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_411400",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411400"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_411404",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411404"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_411424",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411424"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "dword_4114B4",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4114b4"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "elf_hash_bucket",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4002d8"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[17 x i32]"
+			}
+		},
+		{
+			"name" : "elf_hash_chain",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x40031c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[27 x i32]"
+			}
+		},
+		{
+			"name" : "elf_hash_nbucket",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4002d0"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "elf_hash_nchain",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4002d4"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "main_ptr",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411478"
+			},
+			"type" : 
+			{
+				"llvmIr" : "[4 x i32()*]"
+			}
+		},
+		{
+			"name" : "off_41142C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x41142c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411430",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411430"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411434",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411434"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411438",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411438"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_41143C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x41143c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411440",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411440"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411444",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411444"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411448",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411448"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_41144C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x41144c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411450",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411450"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411454",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411454"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411458",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411458"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_41145C",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x41145c"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411460",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411460"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411464",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411464"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "off_411470",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x411470"
+			},
+			"type" : 
+			{
+				"llvmIr" : "void*"
+			}
+		},
+		{
+			"name" : "stdin",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4114a0"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "stdout",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4114a4"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i32"
+			}
+		},
+		{
+			"name" : "stru_4001C0",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4001c0"
+			},
+			"type" : 
+			{
+				"llvmIr" : "%Elf32_Dyn"
+			}
+		},
+		{
+			"name" : "word_401364",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401364"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i16"
+			}
+		},
+		{
+			"name" : "word_401388",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x401388"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i16"
+			}
+		},
+		{
+			"name" : "word_4013A0",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4013a0"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i16"
+			}
+		},
+		{
+			"name" : "word_4013A8",
+			"storage" : 
+			{
+				"type" : "global",
+				"value" : "0x4013a8"
+			},
+			"type" : 
+			{
+				"llvmIr" : "i16"
+			}
+		}
+	],
+	"ida" : true,
+	"inputFile" : "D:/study/ctf/ctf/ctf/match_2018/wangdingbei/4/pwn/ipowtn_e912ff8757c402c8afcc362148836c6c/ipowtn",
+	"languages" : [],
+	"patterns" : [],
+	"registers" : [],
+	"segments" : 
+	[
+		{
+			"endAddr" : "0x400184",
+			"name" : "LOAD",
+			"startAddr" : "0x400000"
+		},
+		{
+			"endAddr" : "0x40019c",
+			"name" : "REGINFO",
+			"startAddr" : "0x400184"
+		},
+		{
+			"endAddr" : "0x400730",
+			"name" : "LOAD",
+			"startAddr" : "0x40019c"
+		},
+		{
+			"endAddr" : "0x400798",
+			"name" : "_init",
+			"startAddr" : "0x400730"
+		},
+		{
+			"endAddr" : "0x4007a0",
+			"name" : "LOAD",
+			"startAddr" : "0x400798"
+		},
+		{
+			"endAddr" : "0x4008b0",
+			"name" : "_plt",
+			"startAddr" : "0x4007a0"
+		},
+		{
+			"endAddr" : "0x4012b0",
+			"name" : "_text",
+			"startAddr" : "0x4008b0"
+		},
+		{
+			"endAddr" : "0x4012d0",
+			"name" : "_MIPS_stubs",
+			"startAddr" : "0x4012b0"
+		},
+		{
+			"endAddr" : "0x401308",
+			"name" : "_fini",
+			"startAddr" : "0x4012d0"
+		},
+		{
+			"endAddr" : "0x401310",
+			"name" : "LOAD",
+			"startAddr" : "0x401308"
+		},
+		{
+			"endAddr" : "0x4013f0",
+			"name" : "_rodata",
+			"startAddr" : "0x401310"
+		},
+		{
+			"endAddr" : "0x4013f4",
+			"name" : "_eh_frame",
+			"startAddr" : "0x4013f0"
+		},
+		{
+			"endAddr" : "0x4113fc",
+			"name" : "_ctors",
+			"startAddr" : "0x4113f4"
+		},
+		{
+			"endAddr" : "0x411404",
+			"name" : "_dtors",
+			"startAddr" : "0x4113fc"
+		},
+		{
+			"endAddr" : "0x411408",
+			"name" : "_jcr",
+			"startAddr" : "0x411404"
+		},
+		{
+			"endAddr" : "0x411410",
+			"name" : "LOAD",
+			"startAddr" : "0x411408"
+		},
+		{
+			"endAddr" : "0x411420",
+			"name" : "_data",
+			"startAddr" : "0x411410"
+		},
+		{
+			"endAddr" : "0x411424",
+			"name" : "_rld_map",
+			"startAddr" : "0x411420"
+		},
+		{
+			"endAddr" : "0x411468",
+			"name" : "_got_plt",
+			"startAddr" : "0x411424"
+		},
+		{
+			"endAddr" : "0x411470",
+			"name" : "LOAD",
+			"startAddr" : "0x411468"
+		},
+		{
+			"endAddr" : "0x411498",
+			"name" : "_got",
+			"startAddr" : "0x411470"
+		},
+		{
+			"endAddr" : "0x41149c",
+			"name" : "_sdata",
+			"startAddr" : "0x411498"
+		},
+		{
+			"endAddr" : "0x4114a0",
+			"name" : "LOAD",
+			"startAddr" : "0x41149c"
+		},
+		{
+			"endAddr" : "0x4114c0",
+			"name" : "_bss",
+			"startAddr" : "0x4114a0"
+		},
+		{
+			"endAddr" : "0x411504",
+			"name" : "extern",
+			"startAddr" : "0x4114c0"
+		}
+	],
+	"structures" : 
+	[
+		{
+			"llvmIr" : "%Elf32_Dyn = type { i32, i32 }"
+		},
+		{
+			"llvmIr" : "%_IO_FILE = type { i32, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, %_IO_marker*, %_IO_FILE*, i32, i32, i32, i16, i8, [1 x i8], void*, i64, void*, void*, void*, void*, i32, i32, [40 x i8] }"
+		},
+		{
+			"llvmIr" : "%_IO_marker = type { %_IO_marker*, %_IO_FILE*, i32 }"
+		},
+		{
+			"llvmIr" : "%timeval = type { i32, i32 }"
+		},
+		{
+			"llvmIr" : "%timezone = type { i32, i32 }"
+		}
+	],
+	"time" : "13:59:30",
+	"tools" : 
+	[
+		{
+			"heuristics" : true,
+			"identicalSignificantNibbles" : 0,
+			"name" : "gcc",
+			"percentage" : 0.0,
+			"totalSignificantNibbles" : 0,
+			"type" : "compiler",
+			"version" : "4.6.3"
+		},
+		{
+			"heuristics" : true,
+			"identicalSignificantNibbles" : 0,
+			"name" : "gcc",
+			"percentage" : 0.0,
+			"totalSignificantNibbles" : 0,
+			"type" : "compiler",
+			"version" : "4.4.7"
+		},
+		{
+			"heuristics" : false,
+			"identicalSignificantNibbles" : 163,
+			"name" : "gcc",
+			"percentage" : 89.071038251366119,
+			"totalSignificantNibbles" : 183,
+			"type" : "compiler",
+			"version" : "4.5.4"
+		}
+	],
+	"vtables" : []
+}
