@@ -2,19 +2,19 @@
 # Impossible #
 ## 1. 题目分析 ##
 首先上保护机制情况：  
-![protect]()  
+![protect](https://raw.githubusercontent.com/fade-vivida/CTF/master/wangdingbei/4/picture/impossibel_protect.jpg)  
 可以看到题目开了NX，Full RELRO和Stack Canary。证明无法通过修改GOT得到shell，同时分析题目发现，存在明显的栈溢出漏洞，因此考虑为ret2libc利用方式。  
 ### 1.1 漏洞点1 ###
-![vul1]()  
+![vul1](https://raw.githubusercontent.com/fade-vivida/CTF/master/wangdingbei/4/picture/vul1.JPG)  
 该函数中存在明显的栈溢出漏洞，但由于canary的存在，需要首先leak canary。而且该函数只能被调用一次，在这考虑使用这一次栈溢出leak canary，再使用其他方法控制程序流。
 ### 1.2 漏洞点2 ###
-![vul2]()  
+![vul2](https://raw.githubusercontent.com/fade-vivida/CTF/master/wangdingbei/4/picture/vul2.JPG)  
 当输入选择为9011时，会进入上图所示的一个函数中，可以看到该函数功能为每次从"/dev/urandom"文件中读入一个随机数，然后与用户输入的数进行比较，如果相同则可以获取再一次的栈溢出机会（复制内容为另一个函数输入到程序数据段的内容）。  
 
 这里有一个很隐蔽的地方，就是程序在每次打开"/dev/urandom"文件后，并没有使用close函数去关闭文件句柄。因此，如果多次打开该文件，当消耗完当前所设定的最大文件句柄数后，就会打开失败，从而read函数读入的随机数为0.  
 
 在本机环境中使用ulimit -n命令测试文件最大句柄数结果如下图所示：  
-![max_fileno]()  
+![max_fileno](https://raw.githubusercontent.com/fade-vivida/CTF/master/wangdingbei/4/picture/max_fileno.JPG)  
 ## 2. 利用方式 ##
 ### 2.1 leak canary ###
 在这里不能直接使用overflow\_once函数去leak canary，因为为了防止canary别泄露，canary的最后一个字节总是'\x00'，因此如果想要打印出canary，那么必须将canary的最后一个字节改为非'\x00'的值，但这会触发stack check failed，导致程序直接结束。  
@@ -24,7 +24,7 @@
 canary所在地址偏移计算公式如下所示：  
 `0x110 - 0x8 - 0x20*3 = 0xa8`  
 leak结果如下图所示：  
-![canary]()  
+![canary](https://raw.githubusercontent.com/fade-vivida/CTF/master/wangdingbei/4/picture/leak_canary.JPG)  
 ### 2.2 猜测随机数 ###
 这里也是后面通过看其他人的writeup才了解到，linux系统下文件句柄数是有限制的，如果多次打开文件（不关闭）则会导致耗尽文件句柄后，再次打开文件失败。因此可以采用这种方式，打开"/dev/urandom"文件1024次后，耗尽文件句柄数，然后导致下一次打开失败，从而读取到的random为0来再次实现栈溢出。
 
