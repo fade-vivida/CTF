@@ -241,7 +241,7 @@
 ![漏洞点](https://raw.githubusercontent.com/fade-vivida/CTF/master/RCTF2018/Pwn/RNote4/picture/1.PNG)  
 保护机制中，No PIE，No RELRO。
 ## 2.漏洞利用 ##
-可以发现程序没有开启基地址随机化，并且可覆写GOT表。因此考虑采用dl_resolve改写free_got为system地址，然后调用free函数，实现利用。
+可以发现程序没有开启基地址随机化，并且可覆写GOT表。因此考虑采用dl\_resolve改写free\_got为system地址，然后调用free函数，实现利用。
 ### 2.1 改写ELF文件头的dynamic节的strtab字段 ###
 改写strtab字段值为一个可控的内存区域。
 ### 2.2 伪造strtab ###
