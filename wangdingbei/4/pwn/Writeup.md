@@ -35,7 +35,7 @@ leak结果如下图所示：
 2. 考虑第二种方法，泄露libc地址，然后调用system。但发现该程序在guess\_secret函数中，如果猜中随机数，则会关闭标准输入（close(0)），因此该方法不成功。  
 3. 直接open("flag",0)，然后read。
 ## 3.完整exp ##
-<pre classs = "prettyprint lang-javascript">
+<pre class = "prettyprint lang-javascript">
 from pwn import *
 from ctypes import *
 import os
