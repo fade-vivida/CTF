@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>writeup_pwn</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/javascript" src="directory.js"></script>
+<link href="https://cdn.bootcss.com/prettify/r298/prettify.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/prettify/r298/prettify.min.js"></script>
+<script>
+	window.onload = function()
+	{
+		prettyPrint();
+	}
+</script>
+</head>
+<body>
+<h1>网鼎杯PWN</h1>
+<h1>Day 1</h1>
+<h2>Guess</h2>
+<h3>1.题目分析</h3>
+<p>题目首先将flag读入栈中，然后给了3次猜测flag的机会。由于开启了canary，可以考虑使用SSP（Stack Smashing Protector）技术，3次输出flag</p>
+<h3>2.漏洞利用</h3>
+<ol>
+<li>首先leak libc地址</li>
+<li>然后leak environment环境变量在栈中的地址</li>
+<li>leak flag  </li>
+</ol>
+<p><strong>该题目的一个关键点就在于：知道libc后，如何得到栈地址。解决方法为libc中保存了envir环境变量的栈地址</strong></p>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/GUESS/guess.py" title="guess.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/GUESS/guess.py</a></p>
+<h2>Blind</h2>
+<h3>1.题目分析</h3>
+<p>漏洞点为release函数中存在UAF，由于申请的堆块大小为0x70，因此考虑使用fastbin attack。  </p>
+<p>但一个需要注意的点是：在malloc_hook和free_hook附近未发现可利用的地址，因此考虑攻击std标准输入输出流（最终结合实际因素，确定攻击点为stdout）</p>
+<h3>2.漏洞利用</h3>
+<ol>
+<li>首先利用UAF，修改fastbin的fd指针，使其指向stderr</li>
+<li>然后2次申请chunk（fastbin attack），修改prt_list数组元素，使其指向一段可写的数据段</li>
+<li>由于程序每次只能修改0x68大小的数据，因此需要分3次写入伪造的_IO_FILE结构（64位下大小为0xD0），然后写入IO_jump_table结构和伪造的虚函数指针</li>
+<li>触发漏洞</li>
+</ol>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/blind/blind.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/blind/blind.py</a></p>
+<h2>Babyheap</h2>
+<h3>1.题目分析</h3>
+<p>漏洞点为delete函数中存在UAF漏洞（可转化为Double Free）</p>
+<p><strong>注：一个需要注意的点就是，是能edit 3次，因此很考验堆块的布局</strong></p>
+<h3>2.漏洞利用</h3>
+<ol>
+<li>首先leak heap address，利用Double Free两次释放同一个fastbin chunk，泄露fd指针。</li>
+<li>修改fd指针，使其指向heap，然后在该处伪造chunk达到修改下一个chunk size字段的目的。</li>
+<li>使用edit功能，修改chunk 0，将伪造堆块的size字段改为正常大小。</li>
+<li>free chunk 4，由于chunk 4的大小已被修改，会出发前向unlink，并会泄露libc地址。</li>
+<li>使用最后的两次edit功能（UAF），修改malloc_hook为one_gadget</li>
+</ol>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/babyheap/babyheap.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/babyheap/babyheap.py</a></p>
+<h2>EasyCoin</h2>
+<h3>1.题目分析</h3>
+<p>漏洞点一共有2处：<br />
+1. 命令存在格式化字符串漏洞<br />
+2. 对于每个login的用户，可以自己给自己送coin，从而造成在交易链表中同一个交易记录被记录两次，因此在free时会形成double free<br />
+3. 程序关键逻辑存在问题 <br />
+4. 关键结构体：<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/wangdingbei/1/pwn/picture/2.JPG" /></p>
+<h3>2.漏洞利用</h3>
+<ol>
+<li>利用格式化字符串漏洞leak heap address和libc address</li>
+<li>这道题目的关键点在于如何布局，使得能够对同一个fastbin chunk free两次。由于程序逻辑处理的失误，当发生自己给自己（用户b）赠送coin后，会先去遍历自己的交易链表（trans_list)，删除该交易id的记录。但此时，如果在btob交易前，先发生过atob的交易，atob已经被删除，但该节点并未从trans_list链表中删除。因此，实际上的trans_list已经发生破坏，会将free后的atob fastbin chunk当做一个trans结构体，将fastbin chunk的fd指针当做trans_list的fd指针。因此可以在此处做文章，伪造trans结构体。<br />
+<img src="https://raw.githubusercontent.com/fade-vivida/CTF/master/wangdingbei/1/pwn/picture/1.JPG" alt="heap chunk" /></li>
+<li>修改fastbin chunk的fd指针，使其指向user c的结构体，修改其password指针指向free_got</li>
+<li>修改free_got值为system </li>
+</ol>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/EasyCoin/EasyCoin.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/EasyCoin/EasyCoin.py</a></p>
+<h2>heylow&amp;heylow2</h2>
+<h3>1.题目分析</h3>
+<p>该题目为一脚本解释器，该解释器定义了如下所示的命令和运算符：<br />
+if/else<br />
+while<br />
+print<br />
+var<br />
+func<br />
+return<br />
+*/+-&amp;|^<br />
+&lt;&lt; &gt;&gt;  = &lt; &gt; &lt;= &gt;=<br />
+漏洞点：<br />
+程序用存在格式化字符串漏洞，难点在于如何找到一条路径到达存在格式化字符串的函数。</p>
+<p><strong>heylow2只是比heylow多了对于输入字节数的限制，其他的没有变化</strong></p>
+<h3>2.漏洞利用</h3>
+<p>经过分析，该格式化字符串其实为一个错误输出函数，当发生脚本无法解析的语句时，就会利用该函数将无法解析的命令后的所有内容全部输出。因此就是需要找到一种能够触发错误的语句。  </p>
+<p>经过对程序的分析，发现如果一条语句为以数字开头，那么该语句错误（结合脚本语言很好理解）。</p>
+<p>下面主要介绍下如何利用pwntools的fmtstr_payload构造格式化字符串。<br />
+在本例题中程序为64位的程序，使用fmtstr_payload直接生产的格式化串布局结构如下：<br />
+<strong>地址 + 格式化串</strong><br />
+1. 其中地址由fmtstr_payload的第三个（write_size）决定，write_size = 'byte'时，表示按照字节进行写入，因此需要8个地址。wirte_size = 'short'时，表示按照word进行写入，因此需要4个地址。<br />
+2. 格式化串形如'%xc%y$hhn'或者'%xc%y$hn'，表示将第一个byte/word写入的值。<br />
+由于要写入的地址包含'\x00'，因此直接使用fmtstr_payload生产的串会被截断，需要把地址移动到格式化串的后面，此时涉及三个方面的修正：偏移，输出字节数和地址对齐。<br />
+具体修改方式参见利用脚本</p>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/heylow2/heylow2.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/1/pwn/heylow2/heylow2.py</a></p>
+<h1>Day 2</h1>
+<h2>Easyfmt</h2>
+<h3>1.题目分析</h3>
+<p>简单的格式化字符串漏洞，具体有两种解法：<br />
+1. 使用libcdatabase根据泄露的函数地址，查找libc库<br />
+2. 使用DynElf技术，进行无libc leak的利用<br />
+本文具体以DynELf技术为主，讲解如何利用printf函数进行libc地址的泄露。</p>
+<h3>2.漏洞利用</h3>
+<p>通常情况下，使用DynElf技术时，程序中最好有write和puts函数作为输出（其中write的用法最为简单，puts还需根据具体情况进行判断），但本次题目中使用了printf函数，由于printf函数具有遇'\x00'截断功能，因此还需要进行逐字节的判断。</p>
+<p>主要判断方法为使用格式化串，将leak函数的address作为参数放置在payload中，并在格式化串中加入特殊字符进行判断。然后逐字节的读取，知道读取完4个字节后，才将内容拼接好后输出。</p>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/easyFMT/easyFMT/easyfmt.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/easyFMT/easyFMT/easyfmt.py</a></p>
+<h2>Fgo</h2>
+<h3>1.题目分析</h3>
+<p>典型的UAF漏洞，其中servant结构体（大小为0x08）有两个成员：<br />
++0x00	void *func_ptr<br />
++0x04	char *name_ptr<br />
+在delete_servant函数中，未对删除后的servant_list数组和name_ptr进行清0，导致其在释放之后还可以再次被使用。因此考虑如果申请一个与servant结构体（servant1），其name_ptr指针指向的chunk大小也为0x10，则释放该servant1，再次释放servant2（其name_ptr指向chunk不为0x10），则此时在fastbin链表中，servant1结构体位于第二个节点，再次申请一个servant3（其namt_ptr大小为0x10），就可以对servant1的func_ptr进行编辑。</p>
+<h3>2.漏洞利用</h3>
+<p>关键代码过程如下：</p>
+<pre><code>system_addr = 0x08048956
+Add(8,'a'.ljust(7,'\x00'))
+Add(16,'a'.ljust(15,'\x00'))
+Add(8,'a'.ljust(7,'\x00'))
+
+Delete(0)
+Delete(1)
+
+payload = p32(system_addr)
+payload = payload.ljust(7,'\x00')
+Add(8,payload)
+</code></pre>
+
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/Fgo/fgo.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/Fgo/fgo.py</a></p>
+<h2>hvm</h2>
+<h3>1.题目分析</h3>
+<p>一道重点考察虚拟机逆向分析的题目，关键在于理清其每一个操作执行的功能即可。</p>
+<p>其主要操作功能如下所示:  </p>
+<p>跳转表<br />
+mmap1 hvmbin映射到内存中的区域。<br />
+mmap2 另外一块0x1000大小的映射区域，用于过程中的读写<br />
+初始化全局变量qword_0x2020b8保存在mmap2中写入的地址，命名为write_memory_ptr = mmap2 + 0x1000<br />
+1. offset = 7，FFFFFA41  jump to 0xD15<br />
+writ_memory_ptr -= 4<br />
+取值6F 0A 00 00,写到write_memory_ptr指向内存<br />
+更新offset = 7<br />
+2. offset = 7，FFFFFA41  jump to 0xD15<br />
+write<em>memory</em>ptr -= 4<br />
+取值68 65 6C 6C,写write_memory_ptr指向内存<br />
+其实拼接后就是字符串&quot;hello\n&quot;<br />
+offset = 0xC<br />
+3. offset = 0xC ，FFFFFAA0 jmp to D74<br />
+将&quot;hello\n&quot;的地址写到全局变量qword_2020F0处<br />
+offset = 0x18<br />
+4. offset = 0x18 ，FFFFFE22 jmp to 10f6<br />
+取值0x01000000，调用sub_a35，该函数功能很简单为DWORD的字节序翻转，所以反转后结果为<br />
+0x00000001，将改制写到全局变量qword_0x2020B0处<br />
+offset = 4<br />
+5. offset = 4 ， jmp to c09<br />
+取值0x00000006，调用sub_a35，翻转后职位0x6，将其存入qword_0x2020c8处<br />
+offset = 1<br />
+6. offset = 1 ，jmp to afb<br />
+同样，取值0x00000001，翻转0x1，存入qword_0x2020d8<br />
+offset = 0xe<br />
+7. offset = 0xe, jmp to e9a<br />
+调用syscall eax=1（表明为write），输出qword_2020f0处内容（hello\n）<br />
+offset = 0x14<br />
+8. offset = 0x14, jmp to 1090<br />
+write_memory_ptr -= 4<br />
+当前文件读的位置（read_ptr)-文件头其实位置（mmap1），然后将文件偏移（0x30）右移2位得到0xc，然后在将0xc翻转0x0c000000，将该值写到write_memory_ptr指向内存处。<br />
+offset = 5<br />
+9. offset = 5 ， jmp to c63<br />
+取值0x0000000e，翻转后为0xe，在左移2位为0x38，然后将当前文件读指针read_ptr（当前文件读指针为0x38）+ 0x38 = 0x70<br />
+在从0x70处开始读一个DWORD，放入offset<br />
+offset = 0x10<br />
+10. offset = 0x10, jmp to f5f<br />
+write_memory_ptr -= 4<br />
+将（mapp2_end-mapp2_st）=0x1000,右移2位，得到0x400，翻转后0x00040000，写入write_memory_ptr指向地址。<br />
+offset = 0x11<br />
+11. offst = 0x11 ， jmp to fc5<br />
+将write_memory_ptr写入全局变量qword_0x2020d0<br />
+offset = 0xf<br />
+12. offset = 0xf , jmp to ee9<br />
+取值0x30000000，翻转为0x30，然后将write_memory_ptr - 0x30，<br />
+offset = 0xc<br />
+13. offset = 0xc ，jmp to d74<br />
+将write_memory_ptr复制给qword_0x2020f0<br />
+offset = 0x18<br />
+14. offset = 0x18, jmp to 10f6,<br />
+取值，翻转，然后赋值给qword_0x2020b0（赋值0）<br />
+offset = 4<br />
+15. offset = 4， jmp to c09<br />
+取值，翻转，赋值给qword_0x2020c8（赋值0xf0）<br />
+offset = 1<br />
+16. offset = 1， jmp to afb<br />
+取值，翻转，赋值给qword_0x2020d8（0）<br />
+offset = 0xe<br />
+17. offset = 0xe ，jmp to e9a<br />
+调用syscall eax=0（表明是read），将数据读到qword_0x2020f0保存的地址(其实就是write_memory_ptr)，大小为0xf0<br />
+offset = 0x12<br />
+注：该处出现漏洞，原始输出缓存为0x30大小，但可以读入0xf0大小的数据，造成溢出<br />
+18. offset = 0x12 ，jmp to ff6<br />
+将qword_0x2020d0 写回write_memory_ptr<br />
+offset = 0x13<br />
+19. offset = 0x13, jmp to 1027<br />
+从write_memory_ptr取值（0x00040000），翻转0x400，再左移两位0x1000，然后将其加上mmap2的基地址，赋值给qword_0x2020D0,
+write_memory += 4<br />
+offset = 6<br />
+20. offset = 6, jmp to cba<br />
+从write_memory_ptr取值（0xc000000），翻转0xc，然后加3再乘4（0x3c），然后加上mmap1的基地址，更新read_ptr = 0x3c<br />
+offset = 7<br />
+write_memory_ptr += 4<br />
+注：该处可以控制程序流程，通过改写偏移地址0xc为其他值，则控制流程按照我们输入的内容执行。<br />
+21. offset = 7，jmp to d15<br />
+write_memory_ptr -= 4<br />
+取值0，写到write_memory_ptr<br />
+offset = 7<br />
+22. offset = 7, jmp to d15<br />
+write_memory_ptr -= 4<br />
+取值62 79 65 0a, 写到write_memory_ptr<br />
+offset = 0xc<br />
+实际为写入字符串&quot;bye\n&quot;<br />
+23. offset = 0xc , jmp to d74<br />
+将write_memory_ptr复制给qword_0x2020f0<br />
+offset = 0x18<br />
+24. offset = 0x18, jmp to 10f6<br />
+取值0x01000000，翻转0x01，赋值给qword_0x2020b0<br />
+offset = 4<br />
+25. offset = 0x4 , jmp to c09<br />
+取值，翻转，赋值给qword_0x2020c8(0x6)<br />
+offset = 1<br />
+26. offset = 1, jmp to afb<br />
+取值，翻转，赋值给qword_0x2020d8(0x1)<br />
+offset = 0xe<br />
+27. offset = 0xe, jmp to e9a<br />
+调用syscall，eax=1（write），输出qword_0x2020f0(&quot;bye&quot;)<br />
+offset = 0x19<br />
+28. offset = 0x19, jmp to 11a4<br />
+exit()  </p>
+<h3>2.漏洞利用</h3>
+<ol>
+<li>利用栈溢出，劫持控制流。</li>
+<li>然后利用功能指令布局execve函数的3个参数，execve(&quot;/bin/sh&quot;,0,0)。</li>
+<li>调用syscall（eax=59），执行execve。</li>
+</ol>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/hvm/hvm.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/hvm/hvm.py</a></p>
+<h2>memffle</h2>
+<h3>1.题目分析</h3>
+<h3>2.漏洞利用</h3>
+<h3>3.利用脚本</h3>
+<p><a href="https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/memffle/memffle/memffle.py">https://github.com/fade-vivida/CTF/blob/master/wangdingbei/2/pwn/memffle/memffle/memffle.py</a></p>
+<h1>Day 3</h1>
+<h1>Day 4</h1>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
