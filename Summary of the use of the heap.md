@@ -114,3 +114,12 @@
 
 
 ### 利用方法2： ###
+
+
+## 2.Unsortedbin Attack ##
+主要利用chunk分配过程中，如果使用unsortedbin进行分配，会有一个拆链的操作，该操作可以实现任意地址写固定值的操作。  
+![vul](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack.JPG)  
+其中bck为当前带切分chunk（victim）的bk值，即bck = victim->bk。因此我们在利用时，可以伪造victim的bk值，使其等于我们想要修改地址-0x10的地址（64bit，32bit在为-0x8），这样就可以改写改地址的内容为一个很大的值（unsortedbin的地址）。
+
+以pwnable.tw的一道题目（BookWriter）为例进行讲解。  
+
