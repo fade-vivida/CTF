@@ -117,9 +117,18 @@
 
 
 ## 2.Unsortedbin Attack ##
-主要利用chunk分配过程中，如果使用unsortedbin进行分配，会有一个拆链的操作，该操作可以实现任意地址写固定值的操作。  
+主要利用chunk分配过程中，如果使用unsortedbin进行分配，会有一个拆链的操作，该操作可以实现任意地址写固定值（unsortedbin地址）的操作。  
+
 ![vul](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack.JPG)  
-其中bck为当前带切分chunk（victim）的bk值，即bck = victim->bk。因此我们在利用时，可以伪造victim的bk值，使其等于我们想要修改地址-0x10的地址（64bit，32bit在为-0x8），这样就可以改写改地址的内容为一个很大的值（unsortedbin的地址）。
+
+其中bck为当前待切分chunk（victim）的bk值，即bck = victim->bk。因此我们在利用时，可以伪造victim的bk值，使其等于我们想要修改地址-0x10的地址（64bit，32bit在为-0x8），这样就可以改写改地址的内容为一个很大的值（unsortedbin的地址）。
 
 以pwnable.tw的一道题目（BookWriter）为例进行讲解。  
 
+该题目类型为菜单类题目，通过漏洞点可以进行堆块的越界写，但没有提供free函数，题目中一个考点就是如何在没有free的情况下泄露libc的地址，使用的方法为修改topchunk\_size，当topchunk\_size不满足分配要求时，会先将该chunk申请，然后再进行free加入unsortedbin中，然后再在另一块区域分配一个新的topchunk。  
+
+完成上述操作后heap布局如下图所示：  
+
+![1](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack1.JPG)
+
+之后为了能够控制程序执行流程，需要改写\_IO\_list\_all为unsortedbin地址，在这我们使用的方法就为unsortedbin attack。
