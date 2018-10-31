@@ -131,4 +131,10 @@
 
 ![1](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack1.JPG)
 
-之后为了能够控制程序执行流程，需要改写\_IO\_list\_all为unsortedbin地址，在这我们使用的方法就为unsortedbin attack。
+之后为了能够控制程序执行流程，需要改写\_IO\_list\_all为unsortedbin地址，在这我们使用的方法就为unsortedbin attack。在这里有一个需要注意的地方就是什么时候main\_arena中last\_remainder字段会发生变化。具体代码如下图所示：  
+
+![2](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack2.JPG)  
+
+可以看到只有当前申请chunk大小（nb）为smallbin时，且unsortedbin中没有chunk大小正好等于申请大小（nb），此时会将所有chunk先放入到对应bin链表中，然后选择一个大于nb的最小chunk，将该chunk切分后将其加入unsortedbin中，并设置last\_remainder字段。  
+
+**注：也就是说last\_remainder字段可以认为是为smallbin设计的，largebin不会用到它**
