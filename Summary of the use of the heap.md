@@ -137,4 +137,8 @@
 
 可以看到只有当前申请chunk大小（nb）为smallbin时，且unsortedbin中没有chunk大小正好等于申请大小（nb），此时会将所有chunk先放入到对应bin链表中，然后选择一个大于nb的最小chunk，将该chunk切分后将其加入unsortedbin中，并设置last\_remainder字段。  
 
-**注：也就是说last\_remainder字段可以认为是为smallbin设计的，largebin不会用到它**
+然后再结合下图所示代码（last\_remainder字段发生改变的条件）：  
+![3](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack3.JPG)  
+
+可以推断出如下结论：  
+**注：last\_remainder字段可以认为是为smallbin设计的，largebin不会用到它。并且如果last\_remainder字段有值，则unsortedbin中肯定只存在一个chunk。**
