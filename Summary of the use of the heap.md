@@ -155,12 +155,30 @@
 如果我们可以一直使用unsortedbin中的唯一chunk直接进行切分分配，但unsortedbin attack的触发条件又为不使用该方式进行分配（因为必须要触发拆链操作），这不互相矛盾吗？
 
 注意仔细看图3中，可以使用unsortedbin直接分配的条件：  
-1. 申请chunk大小nb为smallbin  
+1. 申请chunk大小nb为smallbin范围  
 2. bck == unsorted\_chunks(av)，即当前unsortedbin中只有一个chunk  
 3. victim == last\_remainder  
 4. 切分后的剩余chunk大小要大于chunk允许的最小值
 
 注意其中的条件2，如果我们能够改写victim的bk字段，那么bck = victim->bk = X（伪造值） != unsorted\_chunks(av)，则不会进行该分支，会进行下面的拆链操作。
+
+伪造前，如图5所示：  
+![5](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack5.JPG)  
+伪造后，如图6所示：  
+![6](https://raw.githubusercontent.com/fade-vivida/CTF/master/picture/unsortedbin_attack6.JPG)  
+
+其中0x7ffff7dd2510就为\_IO\_list\_all地址-0x10，然后再次申请一个大小小于0x60的chunk，则会将该chunk从unsortedbin链表上拆下，触发unsortedbin attack。  
+
+由于触发unsortedbin attack后程序会直接崩溃，无法截图，下面手动画一下触发后，堆块的相关布局情况。  
+
+main\_arena中相关字段：  
+unsorted bin（bin0的fd，bk字段）  
+0x7ffff7dd1b88:		0x0000000000603350(fd)	0x00007ffff7dd2510(bk)  
+\_IO\_list\_all字段：  
+0x7ffff7dd2510:		0x0000000000000000		0x0000000000000000(size)  
+0x7ffff7dd2520:		0x00007ffff7dd1b78(fd)	0x0000000000000000(bk)  
+
+可以看到，成功将\_IO\_list\_all字段修改为了main\_arena中topchunk字段的地址。之后的利用内容就属于FSOP，这里不再赘述。
 
 
 
