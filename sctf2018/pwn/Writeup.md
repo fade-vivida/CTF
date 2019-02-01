@@ -225,6 +225,7 @@ unsortedbin attack利用脚本
 [https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/unsortedbin_attack.py](https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/unsortedbin_attack.py)
 # sbbs #
 ## 1.题目分析 ##
-通过分析程序发现，程序login函数中存在缓冲区溢出漏洞，程序本意是允许用户输入8字节的用户名，但在真正输入过程中，read\_buff函数的第2个参数错误给成了0x10，导致其可以覆盖之后的一个指针变量，而这个指针变量原来的值时用来保存登录用户类型的地址。因此造成了任意地址写固定值的漏洞。
+通过分析程序发现，程序login函数中存在缓冲区溢出漏洞，程序本意是允许用户输入8字节的用户名，但在真正输入过程中，read\_buff函数的第2个参数错误给成了0x10，导致其可以覆盖之后的一个指针变量，而这个指针变量原来的值时用来保存登录用户类型的地址。因此造成了任意地址写固定值的漏洞。  
 
+![sbbs_vul](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/sbbs_vul.JPG)
 ## 2.漏洞利用 ##
