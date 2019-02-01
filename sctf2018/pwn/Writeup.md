@@ -229,3 +229,27 @@ unsortedbin attack利用脚本
 
 ![sbbs_vul](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/sbbs_vul.JPG)
 ## 2.漏洞利用 ##
+漏洞的利用方法主要分为两种：  
+### 2.1 修改 MAX\_FAST\_SIZE ###
+该参数用来控制堆分配过程中fastbin的上限大小（32bit default:0x80 , 64bit default:0xa0），因此我们可以通过修改该值实现将一个大chunk放入fastbin链表中。
+
+由于main\_arena->fastbinY链表数组位于main\_arena+8地址处，我们需要采用如下公式计算如何将目标地址修改为释放chunk的地址。
+分配note size = ((target\_addr - (main\_arena + 8))/8 + 2)*0x10 - 0x10。
+
+例如本题目中，我们想要修改\_IO\_list\_all触发house of orange，那么需要分配的note size就为
+
+	size = ((_IO_list_all - fastbin)/8 + 2 )* 0x10 - 0x10
+	create_note(size,payload)
+我们可以现在目标 note 中伪造\_IO\_FILE结构体，然后通过改写MAX\_FAST\_SIZE，释放该note，将\_IO\_list\_all地址处修改为该chunk的地址，后续就是正常的house of orange流程。
+### 2.2 修改chunk size字段，进行unsortedbin attack ###
+泄露出堆地址后，采用错位对齐的方式修改某个chunk的size字段为0x6e69，则触发chunk overlap。并且由于程序规定申请chunk的size必须大于等于0x96，小于等于0x176f,因此需要申请多个chunk进行堆块布局。
+
+具体布局方式可以参见利用代码
+## 3.exploit代码 ##
+修改MAX\_FAST\_SIZE代码：
+
+[https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/sbbs/sbbs.py](https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/sbbs/sbbs.py)
+
+unsortedbin attack代码：
+
+[https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/sbbs/sbbs_unsorted_attack.py](https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/sbbs/sbbs_unsorted_attack.py)
