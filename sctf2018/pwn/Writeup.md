@@ -7,7 +7,7 @@
 ![vul](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/buf_a_vul.JPG)  
 
 ## 2.利用思路 ##
-这道题目可以采用两种解法：largebin attack 和 unsortedbin attack  
+这道题目可以采用三种解法：largebin attack ， unsortedbin attack（攻击\_IO\_list\_all) , unsortedbin attack（攻击\IO\_buf\_end)  
 
 下面着重介绍largebin attack的方法，之后会附带介绍unsortedbin attack攻击流程。
 ### 2.1 leak libc address ###
@@ -223,6 +223,98 @@ Largebin Attack 利用脚本：
 unsortedbin attack利用脚本
 
 [https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/unsortedbin_attack.py](https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/unsortedbin_attack.py)
+## 6.另一种解法 ##
+看四叶草官方writeup发现这道题目可以使用另外一种解法，感觉十分有意思，在这里做以分析记录。  
+首先官方writeup采用了一种十分巧妙的方式进行堆块的overlap  
+
+步骤1：首先按照如下方式构造堆块。
+
+	Alloc(0x88)			#0
+	Alloc(0x400)		#1
+	Alloc(0x100)		#2
+	Alloc(0x88)			#3
+步骤2：然后释放chunk0,chunk1
+
+	Delete(0)
+	Delete(1)
+步骤3：再次将chunk0申请回来，填充后触发off by null，修改处于释放状态的chunk1的size字段。原本释放状态的chunk1的size字段值为0x411，溢出一个'\x00'后变为0x400，且该chunk位于unsortedbin中。
+
+	Alloc(0x88)			#0
+	Fill('a'*0x88)
+步骤4：然后连续申请4个chunk，保证其总大小为0x400。由于我们在步骤3中修改了unsortedbin chunk的大小，使其减小了0x10，因此当我们申请这4个总大小为0x400的chunk后，耗尽了unsortedbin chunk，但在chunk2的头部字段中，还是会认为之前释放的chunk1并没有被使用。
+
+	Alloc(0x88)			#1
+	Alloc(0x88)			#4
+	Alloc(0x200)		#5
+	Alloc(0xc8)			#6
+实际效果图：  
+其中0x5555557584c0是chunk2的地址，0x555555758020开始为chunk0，chunk1，chunk4，chunk5，chunk6...chunk2。  
+![buf_a](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/buf_a_1.JPG)  
+可以看到尽管我们已经将之前释放的unsortedbin chunk已经用尽，但chunk的头仍然表示前面有一个0x410大小的未使用chunk。 
+
+此时，我们再次释放chunk1，然后释放chunk2，即可以触发前向合并。
+
+	Delete(1)
+	Delete(2)
+这里有一点需要注意，根据libc源代码，当触发chunk前向合并需重新计算合并后chunk大小时，不是使用待合并的两个chunk的size字段的和，而是利用如下公式进行计算：
+
+	/* consolidate backward */
+    if (!prev_inuse(p)) {
+      prevsize = prev_size (p);
+      size += prevsize;		//关键代码
+      p = chunk_at_offset(p, -((long) prevsize));
+      unlink(av, p, bck, fwd);
+    }
+也就是说计算前向合并时比较特殊，是使用当前chunk的size字段与当前chunk的presize字段相加直接计算。  
+
+因此当我们free(1)，free(2)后就能够得到一个size = 0x520 大小的chunk
+	
+	计算公式：
+	size = chunk2->size + chunk2->presize = 0x110 + 0x410 = 0x520
+而不是size = 0x1a0 大小的chunk。
+
+	计算公式：
+	size = chunk2->size + chunk1->size = 0x110 + 0x90 = 0x1a0
+此时我们再次释放chunk5，保证unsortedbin中有两个chunk（chunk1+chunk2 size=0x520，chunk2 size = 0x210），且chunk1与chunk2合并后的大chunk包含了chunk5。
+
+	Delete(5)
+然后再次调用Alloc(0x518)，将chunk1+chunk2申请回来，并伪造chunk2的fd，bk字段，用于之后触发unsortedbin attack。
+
+	stdin = libc.symbols['_IO_2_1_stdin_']
+	lg('stdin',stdin)
+	Alloc(0x518)
+	payload = 'a'*0x80
+	payload += p64(0) + p64(0x91)
+	payload += 'b'*0x80
+	payload += p64(0) + p64(0x211)
+	payload += p64(0) + p64(stdin + 0x30)
+	Fill(payload)
+这里需要注意的一点是，在官方的writeup中并没有去改写\_IO\_list\_all这样常规house of orange的做法，而是去改写了stdin+0x40地址处的内容，为什么要这么做呢？
+
+实际通过调试可以发现，stdin+0x40地址处指向了标准输入的\_IO\_buf\_end。在正常情况下，由于程序调用了setvbuf(stdin,0,2,0)，也就是将stdin设置成了无缓冲IO流
+
+	#define _IOFBF 0 /* Fully buffered. */
+	#define _IOLBF 1 /* Line buffered. */
+	#define _IONBF 2 /* No buffering. */
+此时\_IO\_buf\_end = \_IO\_buf\_base + 1 = \_IO\_FILE->\_shortbuf + 1，即每输入一个字节后就将输入内容写入真正的目的地址。那么，如果我们能够改写\_IO\_buf\_end使其远大于\_IO\_buf\_base，就可以不断在缓冲区buf中写入内容直至输入指针等于\_IO\_buf\_end。  
+
+unsortedbin attack before：  
+![attack before](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/buf_a_before.JPG)
+
+unsortedbin attack after：  
+![attack before](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/buf_a_after.JPG)
+
+可以看到main\_arena->top_chunk的地址是大于stdin->\_shortbuf的，并且\_\_malloc\_hook的地址正好位于两者之间，也就是说能够通过该方式改写malloc\_hook的内容，从而达成利用。  
+
+stdin，malloc\_hook，main\_arena的空间布局如下图所示：  
+![buf_a_2](https://raw.githubusercontent.com/fade-vivida/CTF/master/sctf2018/pwn/picture/buf_a_2.JPG)
+
+**注：这里需要注意的一点就是，这道题之所以能利用这种方法，是因为其使用了scanf来读取数据（读入当前操作选择时），如果程序整个过程中都没有使用文件流函数，而是用read这种底层函数来代替，那么无法使用该方法。**
+
+exploit利用代码：
+
+[https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/scanf_buf_end_attack.py](https://github.com/fade-vivida/CTF/blob/master/sctf2018/pwn/bufoverflow_a/cd4fc378-7ede-4d78-b4ac-95613fbd0120/scanf_buf_end_attack.py)
+
 # sbbs #
 ## 1.题目分析 ##
 通过分析程序发现，程序login函数中存在缓冲区溢出漏洞，程序本意是允许用户输入8字节的用户名，但在真正输入过程中，read\_buff函数的第2个参数错误给成了0x10，导致其可以覆盖之后的一个指针变量，而这个指针变量原来的值时用来保存登录用户类型的地址。因此造成了任意地址写固定值的漏洞。  
