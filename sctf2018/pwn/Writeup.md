@@ -84,7 +84,7 @@
 此时largebin链表中保存着一块大小为0x500的chunk，通过overlap覆写改写该chunk的fd，bk，fd\_nextsize,bk\_nextsize字段。改写后的largebin chunk如下所示：
 
 	||        presize = 0x0       ||             size = 0x501             ||
-	|| 		    fd = 0x0          ||            bk = heap_addr            ||
+	||          fd = 0x0          ||            bk = heap_addr            ||
 	||      fd_nextsize= 0x0      || bk_nextsize = global_max_fast - 0x20 ||
 之所以要修改为这样是为了触发之后的largebin attack。  
 在这里我们首先看下，largebin在申请过程中存在下列关键代码：
