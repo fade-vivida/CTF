@@ -19,3 +19,6 @@ House of Orange利用原理就是通过堆溢出漏洞，修改top\_chunk的size
 ![int free]()  
 ### 3.3 Unsortedbin attack ###
 Unsortedbin attack的利用思路为，利用对Unsortedbin中chunk进行拆链时，会将victim->bk->fd赋值为&unsortedbin,从而达到对任意地址写固定值。
+
+# 2. breakout #
+关键点：realloc分配时，会将原来的数据复制到新内存
